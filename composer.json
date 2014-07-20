@@ -6,6 +6,7 @@
     "license": "MIT",
     "require": {
         "php": ">=5.4.2",
+        "composer/composer": "1.0.*@dev",
         "sensio/distribution-bundle": "~2.3",
         "symfony/symfony": "~2.5"
     },
