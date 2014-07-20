@@ -1,0 +1,14 @@
+{
+    "name": "gdbots/symfony",
+    "homepage": "https://github.com/gdbots/symfony",
+    "description": "Addons for symfony php projects.",
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "php": ">=5.4.2",
+        "symfony/symfony": "~2.5"
+    },
+    "autoload": {
+        "psr-0": { "Gdbots\\Symfony\\": "src/" }
+    }
+}
