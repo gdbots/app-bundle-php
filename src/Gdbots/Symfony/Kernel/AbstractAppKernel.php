@@ -43,11 +43,19 @@ abstract class AbstractAppKernel extends Kernel
     protected $systemContext;
 
     /**
-     * The cloud environment (AWS, AZURE, RACKSPACE, etc.)
+     * The cloud provider (aws, azure, google, rackspace, etc.)
      *
      * @var string
      */
-    protected $cloudEnvironment;
+    protected $cloudProvider;
+
+    /**
+     * The cloud region (specific to the cloud provider)
+     * e.g. us-east-1 (aws), us-central1 (google)
+     *
+     * @var string
+     */
+    protected $cloudRegion;
 
     /**
      * Constructor.
@@ -89,9 +97,11 @@ abstract class AbstractAppKernel extends Kernel
 
     /**
      * Returns the name of the system that this app is
-     * apart of.  i.e. piloxing
+     * apart of.  i.e. acme
      *
      * currently expects SYSTEM_NAME to be defined
+     *
+     * @return string
      */
     public function getSystemName()
     {
@@ -106,6 +116,8 @@ abstract class AbstractAppKernel extends Kernel
      * Returns the version of the system.
      *
      * currently expects SYSTEM_VERSION to be defined
+     *
+     * @return string
      */
     public function getSystemVersion()
     {
@@ -120,6 +132,8 @@ abstract class AbstractAppKernel extends Kernel
      * Returns the node of the system.
      *
      * currently expects SYSTEM_NODE to be defined
+     *
+     * @return string
      */
     public function getSystemNode()
     {
@@ -135,6 +149,8 @@ abstract class AbstractAppKernel extends Kernel
      * symfony apps are stored. i.e. the "system"
      *
      * currently expects SYSTEM_ROOT to be defined
+     *
+     * @return string
      */
     public function getSystemRootDir()
     {
@@ -147,7 +163,9 @@ abstract class AbstractAppKernel extends Kernel
 
     /**
      * Returns the context of this app kernel in the system.
-     * The "purpose" of this app kernel.  cms, api, www, etc.
+     * The "purpose" of this kernel.  cms, api, www, etc.
+     *
+     * @return string
      */
     public function getSystemContext()
     {
@@ -161,16 +179,31 @@ abstract class AbstractAppKernel extends Kernel
     }
 
     /**
-     * Returns the cloud environment we're currently
-     * running in.
+     * Returns the cloud provider we're currently running in.
+     *
+     * @return string
      */
-    public function getCloudEnvironment()
+    public function getCloudProvider()
     {
-        if (null === $this->cloudEnvironment) {
-            $this->cloudEnvironment = getenv('CLOUD_ENV') ?: 'private';
+        if (null === $this->cloudProvider) {
+            $this->cloudProvider = getenv('CLOUD_PROVIDER') ?: 'private';
         }
 
-        return $this->cloudEnvironment;
+        return $this->cloudProvider;
+    }
+
+    /**
+     * Returns the cloud region we're currently running in.
+     *
+     * @return string
+     */
+    public function getCloudRegion()
+    {
+        if (null === $this->cloudRegion) {
+            $this->cloudRegion = getenv('CLOUD_REGION') ?: '';
+        }
+
+        return $this->cloudRegion;
     }
 
     /**
@@ -238,7 +271,8 @@ abstract class AbstractAppKernel extends Kernel
         $parameters['system.root_dir'] = $this->getSystemRootDir();
         $parameters['kernel.tmp_dir'] = $this->getTmpDir();
         $parameters['system.context'] = $this->getSystemContext();
-        $parameters['system.cloud'] = $this->getCloudEnvironment();
+        $parameters['cloud.provider'] = $this->getCloudProvider();
+        $parameters['cloud.region'] = $this->getCloudRegion();
         return $parameters;
     }
 }
