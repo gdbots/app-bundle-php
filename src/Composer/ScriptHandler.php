@@ -29,11 +29,6 @@ class ScriptHandler
         }
         static::$options['gdbots-app']['system-file'] = $systemFile = $options['gdbots-app']['system-file'];
 
-        $fs = new Filesystem();
-        if ($fs->exists($systemFile)) {
-            //return;
-        }
-
         $now = new \DateTime();
         list($appVendor, $appName) = explode('/', $event->getComposer()->getPackage()->getName());
         $appRootDir = realpath(getcwd());
@@ -77,6 +72,7 @@ define('CLOUD_INSTANCE_TYPE', '$cloudInstanceType');
 
 TEXT;
 
+        $fs = new Filesystem();
         $fs->dumpFile($systemFile, $system);
     }
 
