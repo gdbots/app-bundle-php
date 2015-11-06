@@ -6,7 +6,7 @@ engines:
     enabled: true
     config:
       file_extensions: 'php'
-      standard: 'PSR1,PSR2,PSR4'
+      standard: 'PSR1,PSR2,PHPCS'
   phpmd:
     enabled: true
     config:
