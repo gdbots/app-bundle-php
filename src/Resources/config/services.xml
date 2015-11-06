@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+  <parameters>
+    <parameter key="gdbots_app.device_view_listener.class">Gdbots\Bundle\AppBundle\EventListener\DeviceViewListener</parameter>
+    <parameter key="gdbots_app.device_view_resolver.class">Gdbots\Bundle\AppBundle\DeviceViewResolver</parameter>
+    <parameter key="gdbots_app.default_device_view">desktop</parameter>
+    <parameter key="gdbots_app.enabled_device_views" type="collection">
+      <parameter>desktop</parameter>
+      <parameter>smartphone</parameter>
+      <parameter>featurephone</parameter>
+      <parameter>smarttv</parameter>
+      <parameter>app</parameter>
+      <parameter>tablet</parameter>
+      <parameter>robot</parameter>
+    </parameter>
+  </parameters>
+
+  <services>
+    <service id="gdbots_app.device_view_listener" class="%gdbots_app.device_view_listener.class%">
+      <argument type="service" id="gdbots_app.device_view_resolver"/>
+      <tag name="kernel.event_subscriber"/>
+    </service>
+
+    <service id="gdbots_app.device_view_resolver" class="%gdbots_app.device_view_resolver.class%">
+      <argument>%gdbots_app.default_device_view%</argument>
+      <argument>%gdbots_app.enabled_device_views%</argument>
+    </service>
+
+    <service id="gdbots_app.twig.app_extension" class="Gdbots\Bundle\AppBundle\Twig\AppExtension" public="false">
+      <argument type="service" id="service_container"/>
+      <tag name="twig.extension"/>
+    </service>
+  </services>
+
+</container>

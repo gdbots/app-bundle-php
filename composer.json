@@ -1,16 +1,25 @@
 {
-    "name": "gdbots/symfony",
-    "homepage": "https://github.com/gdbots/symfony",
-    "description": "Addons for symfony php projects.",
-    "type": "library",
-    "license": "MIT",
-    "require": {
-        "php": ">=5.4.2",
-        "composer/composer": "1.0.*@dev",
-        "sensio/distribution-bundle": "~2.3",
-        "symfony/symfony": "~2.5"
-    },
-    "autoload": {
-        "psr-0": { "Gdbots\\Symfony\\": "src/" }
+  "name": "gdbots/app-bundle",
+  "homepage": "https://github.com/gdbots/app-bundle",
+  "description": "App bundle for symfony3 apps.",
+  "type": "library",
+  "license": "Apache-2.0",
+  "require": {
+    "php": ">=5.5.9",
+    "symfony/symfony": "3.0.*@dev"
+  },
+  "require-dev": {
+    "composer/composer": "1.0.*@dev",
+    "phpunit/phpunit": "~4.3"
+  },
+  "autoload": {
+    "psr-4": {
+      "Gdbots\\Bundle\\AppBundle": "src"
     }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Gdbots\\Tests\\Bundle\\AppBundle": "tests"
+    }
+  }
 }

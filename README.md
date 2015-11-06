@@ -1,4 +1,2 @@
-symfony
-=======
-
-Addons for symfony php projects.
+# app-bundle-php
+App bundle for symfony3 apps.
