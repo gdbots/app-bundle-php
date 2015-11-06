@@ -14,12 +14,12 @@
   },
   "autoload": {
     "psr-4": {
-      "Gdbots\\Bundle\\AppBundle": "src"
+      "Gdbots\\Bundle\\AppBundle\\": "src"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "Gdbots\\Tests\\Bundle\\AppBundle": "tests"
+      "Gdbots\\Tests\\Bundle\\AppBundle\\": "tests"
     }
   }
 }
