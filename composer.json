@@ -21,5 +21,13 @@
     "psr-4": {
       "Gdbots\\Tests\\Bundle\\AppBundle\\": "tests"
     }
+  },
+  "scripts": {
+    "pre-install-cmd": [
+      "Gdbots\\Bundle\\AppBundle\\Composer\\ScriptHandler::installSystemFile"
+    ],
+    "pre-update-cmd": [
+      "Gdbots\\Bundle\\AppBundle\\Composer\\ScriptHandler::installSystemFile"
+    ]
   }
 }

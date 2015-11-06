@@ -11,7 +11,7 @@ class ScriptHandler
      * @var array
      */
     protected static $options = [
-        'gdbots-symfony' => [
+        'gdbots-app' => [
             'system-file' => 'system.php'
         ]
     ];
@@ -24,10 +24,10 @@ class ScriptHandler
     public static function installSystemFile(Event $event)
     {
         $options = array_merge(static::$options, $event->getComposer()->getPackage()->getExtra());
-        if (!isset($options['gdbots-symfony']['system-file'])) {
-            $options['gdbots-symfony']['system-file'] = static::$options['gdbots-symfony']['system-file'];
+        if (!isset($options['gdbots-app']['system-file'])) {
+            $options['gdbots-app']['system-file'] = static::$options['gdbots-app']['system-file'];
         }
-        static::$options['gdbots-symfony']['system-file'] = $systemFile = $options['gdbots-symfony']['system-file'];
+        static::$options['gdbots-app']['system-file'] = $systemFile = $options['gdbots-app']['system-file'];
 
         $fs = new Filesystem();
         if ($fs->exists($systemFile)) {
@@ -59,7 +59,7 @@ class ScriptHandler
  *
  * ########## CAUTION ##########
  *
- * @see \Gdbots\Symfony\Kernel\AppKernel
+ * @see \Gdbots\Bundle\AppBundle\AppKernel
  *
  */
 define('APP_VENDOR', '$appVendor');
