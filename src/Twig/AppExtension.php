@@ -3,6 +3,7 @@
 namespace Gdbots\Bundle\AppBundle\Twig;
 
 use Gdbots\Bundle\AppBundle\DeviceViewResolver;
+use Symfony\Bundle\TwigBundle\Loader\FilesystemLoader;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class AppExtension extends \Twig_Extension implements \Twig_Extension_GlobalsInterface
@@ -40,6 +41,13 @@ class AppExtension extends \Twig_Extension implements \Twig_Extension_GlobalsInt
     {
         $this->container = $container;
         $this->deviceViewResolver = $container->get('gdbots_app.device_view_resolver');
+
+        /** @var FilesystemLoader $loader */
+        $loader = $container->get('twig.loader');
+        $loader->prependPath(
+            $container->getParameter('kernel.root_dir').'/Resources/views/'.
+            $this->deviceViewResolver->resolve(getenv('DEVICE_VIEW'))
+        );
     }
 
     /**

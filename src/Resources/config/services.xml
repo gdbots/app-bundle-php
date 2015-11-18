@@ -1,7 +1,8 @@
 <?xml version="1.0"?>
 <container xmlns="http://symfony.com/schema/dic/services"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd"
+    xmlns:twig="http://symfony.com/schema/dic/twig">
 
   <parameters>
     <parameter key="gdbots_app.device_view_listener.class">Gdbots\Bundle\AppBundle\EventListener\DeviceViewListener</parameter>
@@ -34,5 +35,9 @@
       <tag name="twig.extension"/>
     </service>
   </services>
+
+  <twig:config debug="%kernel.debug%" strict-variables="%kernel.debug%">
+    <twig:path namespace="device_view">%kernel.root_dir%/Resources/templates</twig:path>
+  </twig:config>
 
 </container>
