@@ -6,22 +6,22 @@ use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Config\Loader\LoaderInterface;
 
 /**
- * Using this class assumes the use of Gdbots\Bundle\AppBundle\Composer::installSystemFile
+ * Using this class assumes the use of @see Gdbots\Bundle\AppBundle\Composer::installConstantsFile
  * and having it run in the "pre-install-cmd" and "pre-update-cmd" composer event hooks.
  *
- * The constants written to your project's document root (by default into system.php) are then
- * included (ideally via composer "files") before any of your code runs.
+ * The constants written to your project's document root (by default into .constants.php) are then
+ * included, ideally via composer "files" before any of your code runs.
  */
 abstract class AbstractAppKernel extends Kernel implements AppKernel
 {
-    protected $appDeploymentId;
+    protected $appBuild;
 
     /**
      * @param LoaderInterface $loader
      */
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
-        $loader->load($this->getRootDir() . '/config/config_' . $this->getEnvironment() . '.yml');
+        $loader->load($this->getRootDir().'/config/config_'.$this->getEnvironment().'.yml');
     }
 
     /**
@@ -51,15 +51,15 @@ abstract class AbstractAppKernel extends Kernel implements AppKernel
     /**
      * @return string
      */
-    public function getAppDeploymentId()
+    public function getAppBuild()
     {
         if ($this->isDebug()) {
-            $this->appDeploymentId = explode('.', $this->getStartTime())[0];
+            $this->appBuild = explode('.', $this->getStartTime())[0];
         } else {
-            $this->appDeploymentId = APP_DEPLOYMENT_ID;
+            $this->appBuild = APP_BUILD;
         }
 
-        return $this->appDeploymentId;
+        return $this->appBuild;
     }
 
     /**
@@ -148,7 +148,7 @@ abstract class AbstractAppKernel extends Kernel implements AppKernel
      */
     public function getRootDir()
     {
-        return $this->getAppRootDir() . '/app';
+        return $this->getAppRootDir().'/app';
     }
 
     /**
@@ -156,7 +156,7 @@ abstract class AbstractAppKernel extends Kernel implements AppKernel
      */
     public function getCacheDir()
     {
-        return $this->getAppRootDir() . '/var/cache/' . $this->environment;
+        return $this->getAppRootDir().'/var/cache/'.$this->environment;
     }
 
     /**
@@ -164,7 +164,7 @@ abstract class AbstractAppKernel extends Kernel implements AppKernel
      */
     public function getLogDir()
     {
-        return $this->getAppRootDir() . '/var/logs/' . $this->environment;
+        return $this->getAppRootDir().'/var/logs/'.$this->environment;
     }
 
     /**
@@ -172,7 +172,7 @@ abstract class AbstractAppKernel extends Kernel implements AppKernel
      */
     public function getTmpDir()
     {
-        return $this->getAppRootDir() . '/var/tmp/' . $this->environment;
+        return $this->getAppRootDir().'/var/tmp/'.$this->environment;
     }
 
     /**
@@ -186,7 +186,7 @@ abstract class AbstractAppKernel extends Kernel implements AppKernel
         $parameters['app_vendor'] = $this->getAppVendor();
         $parameters['app_name'] = $this->getAppName();
         $parameters['app_version'] = $this->getAppVersion();
-        $parameters['app_deployment_id'] = $this->getAppDeploymentId();
+        $parameters['app_build'] = $this->getAppBuild();
         $parameters['app_dev_branch'] = $this->getAppDevBranch();
         $parameters['app_root_dir'] = $this->getAppRootDir();
         $parameters['system_mac_address'] = $this->getSystemMacAddress();
@@ -199,7 +199,7 @@ abstract class AbstractAppKernel extends Kernel implements AppKernel
 
         // convenient flags for environments
         $env = strtolower(trim($this->environment));
-        $parameters['is_' . $env . '_environment'] = true;
+        $parameters['is_'.$env.'_environment'] = true;
         $parameters['is_production'] = 'prod' === $env || 'production' === $env ? true : false;
         $parameters['is_not_production'] = !$parameters['is_production'];
 

@@ -15,7 +15,7 @@ class AppExtension extends \Twig_Extension implements \Twig_Extension_GlobalsInt
         'app_vendor',
         'app_name',
         'app_version',
-        'app_deployment_id',
+        'app_build',
         'app_dev_branch',
         'system_mac_address',
         'cloud_provider',
@@ -49,7 +49,7 @@ class AppExtension extends \Twig_Extension implements \Twig_Extension_GlobalsInt
     {
         $globals = [
             'device_view' => $this->deviceViewResolver->resolve(getenv('DEVICE_VIEW')),
-            'is_' . $this->container->getParameter('kernel.environment') . '_environment' => true,
+            'is_'.$this->container->getParameter('kernel.environment').'_environment' => true,
         ];
 
         foreach ($this->appConstants as $v) {

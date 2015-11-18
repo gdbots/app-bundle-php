@@ -1,11 +1,11 @@
 # Symfony App Files #
 ############
 *.cache
+/.constants.php
 bin/
 build/
 cache/
 logs/
-/system.php
 tmp/
 vendor/
 

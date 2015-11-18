@@ -34,10 +34,6 @@ class DeviceViewListener implements EventSubscriberInterface
      */
     public function onKernelRequest(GetResponseEvent $event)
     {
-        if (!$event->isMasterRequest()) {
-            return;
-        }
-
         $request = $event->getRequest();
         $request->attributes->set('device_view', $this->getDeviceView($request));
     }
@@ -88,8 +84,8 @@ class DeviceViewListener implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            KernelEvents::REQUEST => 'onKernelRequest',
-            KernelEvents::RESPONSE => 'onKernelResponse',
+            KernelEvents::REQUEST => ['onKernelRequest', 10000],
+            KernelEvents::RESPONSE => ['onKernelResponse', 10000]
         ];
     }
 }

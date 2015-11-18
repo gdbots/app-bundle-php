@@ -31,13 +31,13 @@ interface AppKernel extends KernelInterface
     public function getAppVersion();
 
     /**
-     * An identifier for the deployment of this app.  This is generally a timestamp
+     * An identifier for the build of this app.  This is generally a timestamp
      * formatted as "YmdHis".  NOTE: When in debug mode, the build will be a new
      * timestamp every request.
      *
      * @return string
      */
-    public function getAppDeploymentId();
+    public function getAppBuild();
 
     /**
      * When in development you can optionally define the dev branch that is being
