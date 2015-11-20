@@ -23,10 +23,10 @@
     }
   },
   "scripts": {
-    "pre-install-cmd": [
+    "post-install-cmd": [
       "Gdbots\\Bundle\\AppBundle\\Composer\\ScriptHandler::installConstantsFile"
     ],
-    "pre-update-cmd": [
+    "post-update-cmd": [
       "Gdbots\\Bundle\\AppBundle\\Composer\\ScriptHandler::installConstantsFile"
     ]
   }
