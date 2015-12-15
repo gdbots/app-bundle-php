@@ -6,7 +6,7 @@ use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Config\Loader\LoaderInterface;
 
 /**
- * Using this class assumes the use of @see Gdbots\Bundle\AppBundle\Composer::installConstantsFile
+ * Using this class assumes the use of @see Gdbots\Bundle\AppBundle\Composer\ScriptHandler::installConstantsFile
  * and having it run in the "pre-install-cmd" and "pre-update-cmd" composer event hooks.
  *
  * The constants written to your project's document root (by default into .constants.php) are then
