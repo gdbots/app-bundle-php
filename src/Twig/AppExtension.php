@@ -44,10 +44,12 @@ class AppExtension extends \Twig_Extension implements \Twig_Extension_GlobalsInt
 
         /** @var FilesystemLoader $loader */
         $loader = $container->get('twig.loader');
+        /*
         $loader->prependPath(
-            $container->getParameter('kernel.root_dir').'/Resources/views/'.
+            $container->getParameter('kernel.root_dir').'/views/'.
             $this->deviceViewResolver->resolve(getenv('DEVICE_VIEW'))
         );
+        */
     }
 
     /**
