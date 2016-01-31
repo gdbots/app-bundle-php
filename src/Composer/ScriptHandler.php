@@ -47,7 +47,6 @@ class ScriptHandler
             'app_version' => $appVersion,
             'app_build' => $now->format('YmdHis'),
             'app_dev_branch' => $appDevBranch,
-            'app_root_dir' => $appRootDir,
             'system_mac_address' => $systemMacAddress,
             'cloud_provider' => $cloudProvider,
             'cloud_region' => $cloudRegion,
@@ -74,7 +73,7 @@ define('APP_NAME', '$appName');
 define('APP_VERSION', '$appVersion');
 define('APP_BUILD', '{$now->format('YmdHis')}');
 define('APP_DEV_BRANCH', '$appDevBranch');
-define('APP_ROOT_DIR', '$appRootDir');
+define('APP_ROOT_DIR', realpath(__DIR__));
 define('SYSTEM_MAC_ADDRESS', '$systemMacAddress');
 define('CLOUD_PROVIDER', '$cloudProvider');
 define('CLOUD_REGION', '$cloudRegion');

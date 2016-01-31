@@ -14,6 +14,7 @@ use Symfony\Component\Config\Loader\LoaderInterface;
  */
 abstract class AbstractAppKernel extends Kernel implements AppKernel
 {
+    /** @var string */
     protected $appBuild;
 
     /**
@@ -156,6 +157,11 @@ abstract class AbstractAppKernel extends Kernel implements AppKernel
      */
     public function getCacheDir()
     {
+        // ensure override is used if present
+        if (isset($_SERVER['SYMFONY__KERNEL__CACHE_DIR'])) {
+            return $_SERVER['SYMFONY__KERNEL__CACHE_DIR'];
+        }
+
         return $this->getAppRootDir().'/var/cache/'.$this->environment;
     }
 
@@ -164,6 +170,11 @@ abstract class AbstractAppKernel extends Kernel implements AppKernel
      */
     public function getLogDir()
     {
+        // ensure override is used if present
+        if (isset($_SERVER['SYMFONY__KERNEL__LOGS_DIR'])) {
+            return $_SERVER['SYMFONY__KERNEL__LOGS_DIR'];
+        }
+
         return $this->getAppRootDir().'/var/logs/'.$this->environment;
     }
 
@@ -195,7 +206,10 @@ abstract class AbstractAppKernel extends Kernel implements AppKernel
         $parameters['cloud_zone'] = $this->getCloudZone();
         $parameters['cloud_instance_id'] = $this->getCloudInstanceId();
         $parameters['cloud_instance_type'] = $this->getCloudInstanceType();
-        $parameters['kernel.tmp_dir'] = $this->getTmpDir();
+
+        if (!isset($parameters['kernel.tmp_dir'])) {
+            $parameters['kernel.tmp_dir'] = realpath($this->getTmpDir()) ?: $this->getTmpDir();
+        }
 
         // convenient flags for environments
         $env = strtolower(trim($this->environment));
