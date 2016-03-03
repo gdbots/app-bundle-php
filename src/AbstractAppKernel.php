@@ -7,7 +7,7 @@ use Symfony\Component\Config\Loader\LoaderInterface;
 
 /**
  * Using this class assumes the use of @see Gdbots\Bundle\AppBundle\Composer\ScriptHandler::installConstantsFile
- * and having it run in the "pre-install-cmd" and "pre-update-cmd" composer event hooks.
+ * and having it run in the "post-install-cmd" and "post-update-cmd" composer event hooks.
  *
  * The constants written to your project's document root (by default into .constants.php) are then
  * included, ideally via composer "files" before any of your code runs.
