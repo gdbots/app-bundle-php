@@ -12,7 +12,8 @@ class ScriptHandler
      */
     protected static $options = [
         'gdbots-app' => [
-            'constants-file' => '.constants.php'
+            'constants-file' => '.constants.php',
+            'version' => null,
         ]
     ];
 
@@ -27,12 +28,18 @@ class ScriptHandler
         if (!isset($options['gdbots-app']['constants-file'])) {
             $options['gdbots-app']['constants-file'] = static::$options['gdbots-app']['constants-file'];
         }
+
+        if (!isset($options['gdbots-app']['version'])) {
+            $options['gdbots-app']['version'] = null;
+        }
+
         static::$options['gdbots-app']['constants-file'] = $constantsFile = $options['gdbots-app']['constants-file'];
 
         $now = new \DateTime();
         list($appVendor, $appName) = explode('/', $event->getComposer()->getPackage()->getName());
         $appRootDir = realpath(getcwd());
-        $appVersion = static::getAppVersion($appRootDir, $now);
+        $appVersion = $options['gdbots-app']['version'] ?: static::getAppVersion($appRootDir, $now);
+        $appBuild = self::getAppBuild($appRootDir, $now);
         $appDevBranch = static::getAppDevBranch($appRootDir);
         $systemMacAddress = static::getSystemMacAddress();
         $cloudProvider = self::getCloudProvider();
@@ -45,7 +52,7 @@ class ScriptHandler
             'app_vendor' => $appVendor,
             'app_name' => $appName,
             'app_version' => $appVersion,
-            'app_build' => $now->format('YmdHis'),
+            'app_build' => $appBuild,
             'app_dev_branch' => $appDevBranch,
             'system_mac_address' => $systemMacAddress,
             'cloud_provider' => $cloudProvider,
@@ -71,7 +78,7 @@ class ScriptHandler
 define('APP_VENDOR', '$appVendor');
 define('APP_NAME', '$appName');
 define('APP_VERSION', '$appVersion');
-define('APP_BUILD', '{$now->format('YmdHis')}');
+define('APP_BUILD', '$appBuild');
 define('APP_DEV_BRANCH', '$appDevBranch');
 define('APP_ROOT_DIR', realpath(__DIR__));
 define('SYSTEM_MAC_ADDRESS', '$systemMacAddress');
@@ -113,6 +120,9 @@ TEXT;
      * Attempts to find the version of the app using git rev-parse, svnversion and
      * finally just using the timestamp as a last resort.
      *
+     * This is ONLY called if the composer.json extra config "['gdbots-app']['version']" has
+     * not been set.
+     *
      * @param string $appRootDir
      * @param \DateTime $date
      * @return string
@@ -141,6 +151,18 @@ TEXT;
         }
 
         return 'v' . $date->format('YmdHis');
+    }
+
+    /**
+     * Determines the build or deployment id of the application.
+     *
+     * @param string $appRootDir
+     * @param \DateTime $date
+     * @return string
+     */
+    protected static function getAppBuild($appRootDir, \DateTime $date)
+    {
+        return getenv('APP_BUILD') ?: $date->format('YmdHis');
     }
 
     /**
@@ -210,6 +232,11 @@ TEXT;
     protected static function getSystemMacAddress()
     {
         static $node = null;
+        if (null !== $node) {
+            return $node;
+        }
+
+        $node = getenv('SYSTEM_MAC_ADDRESS') ?: null;
         if (null !== $node) {
             return $node;
         }
