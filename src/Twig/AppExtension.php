@@ -2,8 +2,6 @@
 
 namespace Gdbots\Bundle\AppBundle\Twig;
 
-use Gdbots\Bundle\AppBundle\DeviceViewResolver;
-use Symfony\Bundle\TwigBundle\Loader\FilesystemLoader;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class AppExtension extends \Twig_Extension implements \Twig_Extension_GlobalsInterface
@@ -31,25 +29,12 @@ class AppExtension extends \Twig_Extension implements \Twig_Extension_GlobalsInt
     /** @var ContainerInterface */
     protected $container;
 
-    /** @var DeviceViewResolver */
-    protected $deviceViewResolver;
-
     /**
      * @param ContainerInterface $container
      */
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
-        $this->deviceViewResolver = $container->get('gdbots_app.device_view_resolver');
-
-        /** @var FilesystemLoader $loader */
-        $loader = $container->get('twig.loader');
-        /*
-        $loader->prependPath(
-            $container->getParameter('kernel.root_dir').'/views/'.
-            $this->deviceViewResolver->resolve(getenv('DEVICE_VIEW'))
-        );
-        */
     }
 
     /**
@@ -58,7 +43,7 @@ class AppExtension extends \Twig_Extension implements \Twig_Extension_GlobalsInt
     public function getGlobals()
     {
         $globals = [
-            'device_view' => $this->deviceViewResolver->resolve(getenv('DEVICE_VIEW')),
+            'device_view' => $this->container->get('gdbots_app.device_view_resolver')->resolve(getenv('DEVICE_VIEW')),
             'is_'.$this->container->getParameter('kernel.environment').'_environment' => true,
         ];
 
