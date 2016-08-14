@@ -6,7 +6,7 @@
   "license": "Apache-2.0",
   "require": {
     "php": ">=5.6",
-    "symfony/symfony": "~3.0"
+    "symfony/symfony": "~3.1"
   },
   "require-dev": {
     "composer/composer": "1.0.*@dev",
