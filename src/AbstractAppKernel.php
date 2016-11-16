@@ -23,6 +23,7 @@ abstract class AbstractAppKernel extends Kernel implements AppKernel
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
         $loader->load($this->getRootDir().'/config/config_'.$this->getEnvironment().'.yml');
+        $loader->load($this->getRootDir().'/config/services_'.$this->getEnvironment().'.yml');
     }
 
     /**
