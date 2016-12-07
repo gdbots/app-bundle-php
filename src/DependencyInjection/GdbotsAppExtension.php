@@ -18,10 +18,12 @@ class GdbotsAppExtension extends Extension
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.xml');
 
+        /*
         $this->addClassesToCompile([
             'Gdbots\\Bundle\\AppBundle\\AbstractAppKernel',
             'Gdbots\\Bundle\\AppBundle\\AppKernel',
             'Gdbots\\Bundle\\AppBundle\\GdbotsAppBundle',
         ]);
+        */
     }
 }
