@@ -176,7 +176,7 @@ abstract class AbstractAppKernel extends Kernel implements AppKernel
             return $_SERVER['SYMFONY__KERNEL__LOGS_DIR'];
         }
 
-        return $this->getAppRootDir().'/var/logs/'.$this->environment;
+        return $this->getAppRootDir().'/var/logs';
     }
 
     /**
@@ -184,7 +184,7 @@ abstract class AbstractAppKernel extends Kernel implements AppKernel
      */
     public function getTmpDir()
     {
-        return $this->getAppRootDir().'/var/tmp/'.$this->environment;
+        return $this->getAppRootDir().'/var/tmp';
     }
 
     /**
