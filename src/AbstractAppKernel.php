@@ -56,7 +56,7 @@ abstract class AbstractAppKernel extends Kernel implements AppKernel
     public function getAppBuild(): string
     {
         if ($this->isDebug()) {
-            $this->appBuild = (string)explode('.', $this->getStartTime())[0];
+            $this->appBuild = (string)explode('.', (string)$this->getStartTime())[0];
         } else {
             $this->appBuild = APP_BUILD;
         }
