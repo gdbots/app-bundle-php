@@ -57,7 +57,7 @@ These can then be used in symfony app configs:
   my_bucket: 'https://s3-%cloud_region%.amazonaws.com/my-bucket-%kernel.environment%-%cloud_region%'
 ```
 
-Why not use environment variables for all of this?  In our use case, we generate the a `.constants.php` file
+Why not use environment variables for all of this?  In our use case, we generate the `.constants.php` file
 using the composer `ScriptHandler` which has application details which are generated at build or deploy time
 and then would not change unless a new deploy happened.
 
@@ -176,7 +176,7 @@ better suited for that, like CloudFront.  For example, in an Apache rewrite rule
 ```
 
 The "device_view" would now equal "smartphone" and be available as a twig variable, a request attribute or
-and environment variable.  Example use in a controller:
+an environment variable.  Example use in a controller:
 
 ```php
 declare(strict_types = 1);
@@ -204,4 +204,11 @@ final class DefaultController extends Controller
         return $this->renderUsingDeviceView('@app/index%device_view%.html.twig');
     }
 }
+```
+Using [Twig dynamic inheritance](http://twig.sensiolabs.org/doc/2.x/tags/extends.html#dynamic-inheritance) you 
+can make use of the `device_view` variable to provide a device specific layout when available.
+```twig
+{% extends ['layout.' ~ device_view ~ '.twig.html', 'layout.twig.html'] %}
+
+I'm on a {{ device_view }}.
 ```
