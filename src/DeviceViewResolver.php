@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 namespace Gdbots\Bundle\AppBundle;
 
@@ -13,6 +14,7 @@ namespace Gdbots\Bundle\AppBundle;
  * "desktop" view of the app.
  *
  * Examples: desktop, smartphone, smarttv, etc.
+ *
  * @link https://www.scientiamobile.com/wurflCapability
  *
  * This class holds an array of enabled views and a default.  Resolving
@@ -28,9 +30,9 @@ class DeviceViewResolver
 
     /**
      * @param string $default
-     * @param array $enabledViews
+     * @param array  $enabledViews
      */
-    public function __construct($default = 'desktop', array $enabledViews = [])
+    public function __construct(string $default = 'desktop', array $enabledViews = [])
     {
         foreach (($enabledViews ?: $this->getDefaultViews()) as $view) {
             $view = $this->sanitize($view);
@@ -45,9 +47,10 @@ class DeviceViewResolver
 
     /**
      * @param string $view
+     *
      * @return string
      */
-    public function resolve($view = null)
+    public function resolve(?string $view = null): string
     {
         $view = $this->sanitize($view);
         if ($this->isValid($view)) {
@@ -59,27 +62,30 @@ class DeviceViewResolver
 
     /**
      * @param string $view
+     *
      * @return string
      */
-    public function sanitize($view)
+    public function sanitize(string $view): string
     {
         return strtolower(preg_replace('/[^a-zA-Z0-9]+/', '', $view));
     }
 
     /**
      * @param string $view
+     *
      * @return bool
      */
-    public function isValid($view)
+    public function isValid(string $view): bool
     {
         return !empty($view) && isset($this->enabledViews[$view]);
     }
 
     /**
      * @param string $view
+     *
      * @return bool
      */
-    public function matchesDefault($view)
+    public function matchesDefault(string $view): bool
     {
         return $view === $this->default;
     }
@@ -87,7 +93,7 @@ class DeviceViewResolver
     /**
      * @return array
      */
-    public function getEnabledViews()
+    public function getEnabledViews(): array
     {
         return $this->enabledViews;
     }
@@ -95,7 +101,7 @@ class DeviceViewResolver
     /**
      * @return array
      */
-    public function getDefaultViews()
+    public function getDefaultViews(): array
     {
         return ['desktop', 'smartphone', 'featurephone', 'smarttv', 'app', 'tablet', 'robot'];
     }
