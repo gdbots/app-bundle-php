@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 namespace Gdbots\Bundle\AppBundle\DependencyInjection;
 
@@ -18,10 +19,12 @@ class GdbotsAppExtension extends Extension
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.xml');
 
+        /*
         $this->addClassesToCompile([
             'Gdbots\\Bundle\\AppBundle\\AbstractAppKernel',
             'Gdbots\\Bundle\\AppBundle\\AppKernel',
             'Gdbots\\Bundle\\AppBundle\\GdbotsAppBundle',
         ]);
+        */
     }
 }

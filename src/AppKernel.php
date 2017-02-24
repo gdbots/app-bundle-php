@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 namespace Gdbots\Bundle\AppBundle;
 
@@ -12,7 +13,7 @@ interface AppKernel extends KernelInterface
      *
      * @return string
      */
-    public function getAppVendor();
+    public function getAppVendor(): string;
 
     /**
      * The name of the application.
@@ -20,7 +21,7 @@ interface AppKernel extends KernelInterface
      *
      * @return string
      */
-    public function getAppName();
+    public function getAppName(): string;
 
     /**
      * The version of the application.  e.g. v1.0.0, git commit hash, svn revision
@@ -28,7 +29,7 @@ interface AppKernel extends KernelInterface
      *
      * @return string
      */
-    public function getAppVersion();
+    public function getAppVersion(): string;
 
     /**
      * An identifier for the build of this app.  This is generally a timestamp
@@ -37,7 +38,7 @@ interface AppKernel extends KernelInterface
      *
      * @return string
      */
-    public function getAppBuild();
+    public function getAppBuild(): string;
 
     /**
      * When in development you can optionally define the dev branch that is being
@@ -46,14 +47,14 @@ interface AppKernel extends KernelInterface
      *
      * @return string
      */
-    public function getAppDevBranch();
+    public function getAppDevBranch(): string;
 
     /**
      * Root directory where the application is deployed.
      *
      * @return string
      */
-    public function getAppRootDir();
+    public function getAppRootDir(): string;
 
     /**
      * A media access control address (MAC address), also called physical address,
@@ -62,40 +63,40 @@ interface AppKernel extends KernelInterface
      *
      * @return string
      */
-    public function getSystemMacAddress();
+    public function getSystemMacAddress(): string;
 
     /**
      * The cloud provider (aws, azure, google, rackspace, etc.)
      *
      * @return string
      */
-    public function getCloudProvider();
+    public function getCloudProvider(): string;
 
     /**
      * The region this app is currently running in.  e.g. us-east-1 (aws), us-central1 (google)
      *
      * @return string
      */
-    public function getCloudRegion();
+    public function getCloudRegion(): string;
 
     /**
      * The zone (partition of a region) the app is running in.
      *
      * @return string
      */
-    public function getCloudZone();
+    public function getCloudZone(): string;
 
     /**
      * A unique identifier for the instance.
      *
      * @return string
      */
-    public function getCloudInstanceId();
+    public function getCloudInstanceId(): string;
 
     /**
      * A reference to the machine type/size. e.g. on EC2 this might be "c4.xlarge"
      *
      * @return string
      */
-    public function getCloudInstanceType();
+    public function getCloudInstanceType(): string;
 }

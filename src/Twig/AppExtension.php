@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 namespace Gdbots\Bundle\AppBundle\Twig;
 
@@ -8,7 +9,8 @@ class AppExtension extends \Twig_Extension implements \Twig_Extension_GlobalsInt
 {
     /**
      * Constants from the container to return as globals for twig templating.
-     * @var array
+     *
+     * @var string[]
      */
     protected $appConstants = [
         'app_vendor',
@@ -44,7 +46,7 @@ class AppExtension extends \Twig_Extension implements \Twig_Extension_GlobalsInt
     {
         $globals = [
             'device_view' => $this->container->get('gdbots_app.device_view_resolver')->resolve(getenv('DEVICE_VIEW')),
-            'is_'.$this->container->getParameter('kernel.environment').'_environment' => true,
+            'is_' . $this->container->getParameter('kernel.environment') . '_environment' => true,
         ];
 
         foreach ($this->appConstants as $v) {

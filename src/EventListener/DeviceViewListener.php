@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 namespace Gdbots\Bundle\AppBundle\EventListener;
 
@@ -61,6 +62,7 @@ class DeviceViewListener implements EventSubscriberInterface
 
     /**
      * @param Request $request
+     *
      * @return string
      */
     protected function getDeviceView(Request $request)
@@ -84,8 +86,8 @@ class DeviceViewListener implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            KernelEvents::REQUEST => ['onKernelRequest', 10000],
-            KernelEvents::RESPONSE => ['onKernelResponse', 10000]
+            KernelEvents::REQUEST  => ['onKernelRequest', 10000],
+            KernelEvents::RESPONSE => ['onKernelResponse', 10000],
         ];
     }
 }

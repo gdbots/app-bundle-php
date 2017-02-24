@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 namespace Gdbots\Bundle\AppBundle;
 
@@ -6,7 +7,7 @@ use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Config\Loader\LoaderInterface;
 
 /**
- * Using this class assumes the use of @see Gdbots\Bundle\AppBundle\Composer\ScriptHandler::installConstantsFile
+ * Using this class assumes the use of @see \Gdbots\Bundle\AppBundle\Composer\ScriptHandler::installConstantsFile
  * and having it run in the "post-install-cmd" and "post-update-cmd" composer event hooks.
  *
  * The constants written to your project's document root (by default into .constants.php) are then
@@ -22,40 +23,40 @@ abstract class AbstractAppKernel extends Kernel implements AppKernel
      */
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
-        $loader->load($this->getRootDir().'/config/config_'.$this->getEnvironment().'.yml');
+        $loader->load($this->getRootDir() . '/config/config_' . $this->getEnvironment() . '.yml');
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
-    public function getAppVendor()
+    public function getAppVendor(): string
     {
         return APP_VENDOR;
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
-    public function getAppName()
+    public function getAppName(): string
     {
         return APP_NAME;
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
-    public function getAppVersion()
+    public function getAppVersion(): string
     {
         return APP_VERSION;
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
-    public function getAppBuild()
+    public function getAppBuild(): string
     {
         if ($this->isDebug()) {
-            $this->appBuild = explode('.', $this->getStartTime())[0];
+            $this->appBuild = (string)explode('.', (string)$this->getStartTime())[0];
         } else {
             $this->appBuild = APP_BUILD;
         }
@@ -64,65 +65,65 @@ abstract class AbstractAppKernel extends Kernel implements AppKernel
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
-    public function getAppDevBranch()
+    public function getAppDevBranch(): string
     {
         return APP_DEV_BRANCH;
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
-    public function getAppRootDir()
+    public function getAppRootDir(): string
     {
         return APP_ROOT_DIR;
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
-    public function getSystemMacAddress()
+    public function getSystemMacAddress(): string
     {
         return SYSTEM_MAC_ADDRESS;
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
-    public function getCloudProvider()
+    public function getCloudProvider(): string
     {
         return CLOUD_PROVIDER;
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
-    public function getCloudRegion()
+    public function getCloudRegion(): string
     {
         return CLOUD_REGION;
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
-    public function getCloudZone()
+    public function getCloudZone(): string
     {
         return CLOUD_ZONE;
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
-    public function getCloudInstanceId()
+    public function getCloudInstanceId(): string
     {
         return CLOUD_INSTANCE_ID ?: $this->getSystemMacAddress();
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
-    public function getCloudInstanceType()
+    public function getCloudInstanceType(): string
     {
         return CLOUD_INSTANCE_TYPE;
     }
@@ -149,7 +150,7 @@ abstract class AbstractAppKernel extends Kernel implements AppKernel
      */
     public function getRootDir()
     {
-        return $this->getAppRootDir().'/app';
+        return $this->getAppRootDir() . '/app';
     }
 
     /**
@@ -162,7 +163,7 @@ abstract class AbstractAppKernel extends Kernel implements AppKernel
             return $_SERVER['SYMFONY__KERNEL__CACHE_DIR'];
         }
 
-        return $this->getAppRootDir().'/var/cache/'.$this->environment;
+        return $this->getAppRootDir() . '/var/cache/' . $this->environment;
     }
 
     /**
@@ -175,15 +176,15 @@ abstract class AbstractAppKernel extends Kernel implements AppKernel
             return $_SERVER['SYMFONY__KERNEL__LOGS_DIR'];
         }
 
-        return $this->getAppRootDir().'/var/logs/'.$this->environment;
+        return $this->getAppRootDir() . '/var/logs';
     }
 
     /**
      * @return string
      */
-    public function getTmpDir()
+    public function getTmpDir(): string
     {
-        return $this->getAppRootDir().'/var/tmp/'.$this->environment;
+        return $this->getAppRootDir() . '/var/tmp';
     }
 
     /**
@@ -213,7 +214,7 @@ abstract class AbstractAppKernel extends Kernel implements AppKernel
 
         // convenient flags for environments
         $env = strtolower(trim($this->environment));
-        $parameters['is_'.$env.'_environment'] = true;
+        $parameters['is_' . $env . '_environment'] = true;
         $parameters['is_production'] = 'prod' === $env || 'production' === $env ? true : false;
         $parameters['is_not_production'] = !$parameters['is_production'];
 

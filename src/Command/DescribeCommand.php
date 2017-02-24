@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 namespace Gdbots\Bundle\AppBundle\Command;
 
@@ -18,12 +19,11 @@ class DescribeCommand extends ContainerAwareCommand
         $this
             ->setName('app:describe')
             ->setDescription('Returns the details of the application as json (name, version, build, etc.)')
-            ->addOption('pretty', null, InputOption::VALUE_NONE, 'Prints the json response with JSON_PRETTY_PRINT.')
-        ;
+            ->addOption('pretty', null, InputOption::VALUE_NONE, 'Prints the json response with JSON_PRETTY_PRINT.');
     }
 
     /**
-     * @param InputInterface $input
+     * @param InputInterface  $input
      * @param OutputInterface $output
      *
      * @return null
