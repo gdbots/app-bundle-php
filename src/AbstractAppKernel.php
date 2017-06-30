@@ -180,7 +180,6 @@ abstract class AbstractAppKernel extends Kernel implements AppKernel
      */
     public function getCacheDir()
     {
-        // ensure override is used if present
         $dir = getenv('APP_CACHE_DIR');
         if ($dir) {
             return $dir;
@@ -194,7 +193,6 @@ abstract class AbstractAppKernel extends Kernel implements AppKernel
      */
     public function getLogDir()
     {
-        // ensure override is used if present
         $dir = getenv('APP_LOGS_DIR');
         if ($dir) {
             return $dir;
@@ -208,6 +206,11 @@ abstract class AbstractAppKernel extends Kernel implements AppKernel
      */
     public function getTmpDir(): string
     {
+        $dir = getenv('APP_TMP_DIR');
+        if ($dir) {
+            return $dir;
+        }
+
         return $this->getProjectDir() . '/var/tmp';
     }
 
