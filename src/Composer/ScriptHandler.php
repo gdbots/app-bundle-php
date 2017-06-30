@@ -25,7 +25,7 @@ class ScriptHandler
      */
     public static function installConstantsFile(Event $event)
     {
-        $version = $event->getComposer()->getPackage()->getVersion();
+        $version = $event->getComposer()->getPackage()->getPrettyVersion();
         $options = array_merge(static::$options, $event->getComposer()->getPackage()->getExtra());
         if (!isset($options['gdbots-app']['constants-file'])) {
             $options['gdbots-app']['constants-file'] = static::$options['gdbots-app']['constants-file'];
