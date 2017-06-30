@@ -281,7 +281,7 @@ TEXT;
      *
      * @return string
      */
-    protected static function getIfconfig(): string
+    protected static function getIfconfig(): ?string
     {
         ob_start();
         switch (strtoupper(substr(php_uname('a'), 0, 3))) {
@@ -327,7 +327,7 @@ TEXT;
     /**
      * @return string
      */
-    protected static function getCloudInstanceId(): string
+    protected static function getCloudInstanceId(): ?string
     {
         return getenv('CLOUD_INSTANCE_ID') ?: static::getSystemMacAddress();
     }
