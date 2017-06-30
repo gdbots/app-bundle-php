@@ -97,7 +97,7 @@ abstract class AbstractAppKernel extends Kernel implements AppKernel
     /**
      * {@inheritdoc}
      */
-    public function getProjectDir(): string
+    public function getProjectDir()
     {
         return APP_ROOT_DIR;
     }
