@@ -28,6 +28,7 @@
     ],
     "post-update-cmd": [
       "Gdbots\\Bundle\\AppBundle\\Composer\\ScriptHandler::installConstantsFile"
-    ]
+    ],
+    "test": "vendor/bin/phpunit"
   }
 }

@@ -223,6 +223,7 @@ abstract class AbstractAppKernel extends Kernel implements AppKernel
         $parameters['app_name'] = $this->getAppName();
         $parameters['app_version'] = $this->getAppVersion();
         $parameters['app_build'] = $this->getAppBuild();
+        $parameters['app_deployment_id'] = $this->getAppDeploymentId();
         $parameters['app_dev_branch'] = $this->getAppDevBranch();
         $parameters['app_root_dir'] = $this->getAppRootDir();
         $parameters['system_mac_address'] = $this->getSystemMacAddress();

@@ -52,8 +52,7 @@ class DeviceViewResolver
      */
     public function resolve(?string $view = null): string
     {
-        $view = "{$view}";
-        $view = $this->sanitize($view);
+        $view = $this->sanitize("{$view}");
         if ($this->isValid($view)) {
             return $view;
         }

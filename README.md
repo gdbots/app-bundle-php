@@ -29,7 +29,9 @@ The kernel also injects that data into the kernel parameters:
         $parameters['app_name'] = $this->getAppName();
         $parameters['app_version'] = $this->getAppVersion();
         $parameters['app_build'] = $this->getAppBuild();
+        $parameters['app_deployment_id'] = $this->getAppDeploymentId();
         $parameters['app_dev_branch'] = $this->getAppDevBranch();
+        $parameters['app_root_dir'] = $this->getAppRootDir();
         $parameters['system_mac_address'] = $this->getSystemMacAddress();
         $parameters['cloud_provider'] = $this->getCloudProvider();
         $parameters['cloud_region'] = $this->getCloudRegion();
@@ -37,7 +39,6 @@ The kernel also injects that data into the kernel parameters:
         $parameters['cloud_instance_id'] = $this->getCloudInstanceId();
         $parameters['cloud_instance_type'] = $this->getCloudInstanceType();
 
-        $parameters['app_root_dir'] = $this->getAppRootDir();
         if (!isset($parameters['kernel.tmp_dir'])) {
             $parameters['kernel.tmp_dir'] = realpath($this->getTmpDir()) ?: $this->getTmpDir();
         }
@@ -86,7 +87,7 @@ This happens when composer install runs or potentially Chef or CodeDeploy.  Comp
 
 CodeDeploy provisioning script example:
 ```bash
-sed -i "/APP_BUILD/s/'[^']*'/'${DEPLOYMENT_ID}'/2" .constants.php
+sed -i "/APP_DEPLOYMENT_ID/s/'[^']*'/'${DEPLOYMENT_ID}'/2" .constants.php
 sed -i "/APP_DEV_BRANCH/s/'[^']*'/'${APP_BRANCH}'/2" .constants.php
 sed -i "/SYSTEM_MAC_ADDRESS/s/'[^']*'/'${SYSTEM_MAC_ADDRESS}'/2" .constants.php
 sed -i "/CLOUD_PROVIDER/s/'[^']*'/'${CLOUD_PROVIDER}'/2" .constants.php
@@ -109,6 +110,7 @@ Example output from the command:
   "app_name": "blog",
   "app_version": "v0.1.0",
   "app_build": "1487902285",
+  "app_deployment_id": "d-IHMA71LSM",
   "app_dev_branch": "master",
   "system_mac_address": "02:a0:57:b4:59:e9",
   "cloud_provider": "private",
@@ -136,19 +138,19 @@ Example output from the command:
 
 Example use in CodeDeploy ValidateService hook:
 ```bash
-if (( $( curl -s --resolve ${app_domain}:8080:127.0.0.1 http://${app_domain}:8080/health-check | grep -c "APP_BUILD = '${DEPLOYMENT_ID}'" ) > 0 ))
+if (( $( curl -s --resolve ${app_domain}:8080:127.0.0.1 http://${app_domain}:8080/health-check | grep -c "APP_DEPLOYMENT_ID = '${DEPLOYMENT_ID}'" ) > 0 ))
 then
   echo "[${APP_NAME}] validate success (curl)"
 else
-  echo "[${APP_NAME}] validate failure (curl), does not have [APP_BUILD = '${DEPLOYMENT_ID}']"
+  echo "[${APP_NAME}] validate failure (curl), does not have [APP_DEPLOYMENT_ID = '${DEPLOYMENT_ID}']"
   exit 1
 fi
 
-app_build=`sudo -H -u ${APP_OWNER} php ${APP_DIR}/bin/console app:describe --env=${APP_ENV} --no-debug --no-interaction | jq -r '.app_build'`
-if [ "${app_build}" == "${DEPLOYMENT_ID}" ]; then
+app_deployment_id=`sudo -H -u ${APP_OWNER} php ${APP_DIR}/bin/console app:describe --env=${APP_ENV} --no-debug --no-interaction | jq -r '.app_deployment_id'`
+if [ "${app_deployment_id}" == "${DEPLOYMENT_ID}" ]; then
   echo "[${APP_NAME}] validate success (console)"
 else
-  echo "[${APP_NAME}] validate failure (console), app returned '${app_build}', expected '${DEPLOYMENT_ID}'"
+  echo "[${APP_NAME}] validate failure (console), app returned '${app_deployment_id}', expected '${DEPLOYMENT_ID}'"
   exit 1
 fi
 ```
@@ -179,7 +181,7 @@ The "device_view" would now equal "smartphone" and be available as a twig variab
 an environment variable.  Example use in a controller:
 
 ```php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace AppBundle\Controller;
 

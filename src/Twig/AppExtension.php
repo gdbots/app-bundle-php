@@ -17,6 +17,7 @@ class AppExtension extends \Twig_Extension implements \Twig_Extension_GlobalsInt
         'app_name',
         'app_version',
         'app_build',
+        'app_deployment_id',
         'app_dev_branch',
         'system_mac_address',
         'cloud_provider',
