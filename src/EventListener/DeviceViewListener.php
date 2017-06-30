@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Gdbots\Bundle\AppBundle\EventListener;
 
@@ -33,7 +33,7 @@ class DeviceViewListener implements EventSubscriberInterface
     /**
      * @param GetResponseEvent $event
      */
-    public function onKernelRequest(GetResponseEvent $event)
+    public function onKernelRequest(GetResponseEvent $event): void
     {
         $request = $event->getRequest();
         $request->attributes->set('device_view', $this->getDeviceView($request));
@@ -42,7 +42,7 @@ class DeviceViewListener implements EventSubscriberInterface
     /**
      * @param FilterResponseEvent $event
      */
-    public function onKernelResponse(FilterResponseEvent $event)
+    public function onKernelResponse(FilterResponseEvent $event): void
     {
         if (!$event->isMasterRequest()) {
             return;
@@ -65,7 +65,7 @@ class DeviceViewListener implements EventSubscriberInterface
      *
      * @return string
      */
-    protected function getDeviceView(Request $request)
+    protected function getDeviceView(Request $request): string
     {
         if (null === $this->deviceView) {
             $envValue = $request->server->get('DEVICE_VIEW');

@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Gdbots\Bundle\AppBundle;
 
@@ -55,13 +55,27 @@ abstract class AbstractAppKernel extends Kernel implements AppKernel
      */
     public function getAppBuild(): string
     {
-        if ($this->isDebug()) {
-            $this->appBuild = (string)explode('.', (string)$this->getStartTime())[0];
-        } else {
-            $this->appBuild = APP_BUILD;
+        if (null === $this->appBuild) {
+            if ($this->isDebug()) {
+                $this->appBuild = (string)explode('.', (string)$this->getStartTime())[0];
+            } else {
+                $this->appBuild = APP_BUILD;
+            }
         }
 
         return $this->appBuild;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAppDeploymentId(): string
+    {
+        if ($this->isDebug()) {
+            return $this->getAppBuild();
+        }
+
+        return APP_DEPLOYMENT_ID;
     }
 
     /**
@@ -76,6 +90,14 @@ abstract class AbstractAppKernel extends Kernel implements AppKernel
      * {@inheritdoc}
      */
     public function getAppRootDir(): string
+    {
+        return APP_ROOT_DIR;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getProjectDir(): string
     {
         return APP_ROOT_DIR;
     }
@@ -150,7 +172,7 @@ abstract class AbstractAppKernel extends Kernel implements AppKernel
      */
     public function getRootDir()
     {
-        return $this->getAppRootDir() . '/app';
+        return $this->getProjectDir() . '/app';
     }
 
     /**
@@ -159,11 +181,12 @@ abstract class AbstractAppKernel extends Kernel implements AppKernel
     public function getCacheDir()
     {
         // ensure override is used if present
-        if (isset($_SERVER['SYMFONY__KERNEL__CACHE_DIR'])) {
-            return $_SERVER['SYMFONY__KERNEL__CACHE_DIR'];
+        $dir = getenv('APP_CACHE_DIR');
+        if ($dir) {
+            return $dir;
         }
 
-        return $this->getAppRootDir() . '/var/cache/' . $this->environment;
+        return $this->getProjectDir() . '/var/cache/' . $this->environment;
     }
 
     /**
@@ -172,11 +195,12 @@ abstract class AbstractAppKernel extends Kernel implements AppKernel
     public function getLogDir()
     {
         // ensure override is used if present
-        if (isset($_SERVER['SYMFONY__KERNEL__LOGS_DIR'])) {
-            return $_SERVER['SYMFONY__KERNEL__LOGS_DIR'];
+        $dir = getenv('APP_LOGS_DIR');
+        if ($dir) {
+            return $dir;
         }
 
-        return $this->getAppRootDir() . '/var/logs';
+        return $this->getProjectDir() . '/var/logs';
     }
 
     /**
@@ -184,7 +208,7 @@ abstract class AbstractAppKernel extends Kernel implements AppKernel
      */
     public function getTmpDir(): string
     {
-        return $this->getAppRootDir() . '/var/tmp';
+        return $this->getProjectDir() . '/var/tmp';
     }
 
     /**

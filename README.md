@@ -30,7 +30,6 @@ The kernel also injects that data into the kernel parameters:
         $parameters['app_version'] = $this->getAppVersion();
         $parameters['app_build'] = $this->getAppBuild();
         $parameters['app_dev_branch'] = $this->getAppDevBranch();
-        $parameters['app_root_dir'] = $this->getAppRootDir();
         $parameters['system_mac_address'] = $this->getSystemMacAddress();
         $parameters['cloud_provider'] = $this->getCloudProvider();
         $parameters['cloud_region'] = $this->getCloudRegion();
@@ -38,6 +37,7 @@ The kernel also injects that data into the kernel parameters:
         $parameters['cloud_instance_id'] = $this->getCloudInstanceId();
         $parameters['cloud_instance_type'] = $this->getCloudInstanceType();
 
+        $parameters['app_root_dir'] = $this->getAppRootDir();
         if (!isset($parameters['kernel.tmp_dir'])) {
             $parameters['kernel.tmp_dir'] = realpath($this->getTmpDir()) ?: $this->getTmpDir();
         }
