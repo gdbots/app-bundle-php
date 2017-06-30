@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Gdbots\Bundle\AppBundle\Composer;
 
@@ -13,8 +14,8 @@ class ScriptHandler
     protected static $options = [
         'gdbots-app' => [
             'constants-file' => '.constants.php',
-            'version' => null,
-        ]
+            'version'        => null,
+        ],
     ];
 
     /**
@@ -24,13 +25,14 @@ class ScriptHandler
      */
     public static function installConstantsFile(Event $event)
     {
+        $version = $event->getComposer()->getPackage()->getPrettyVersion();
         $options = array_merge(static::$options, $event->getComposer()->getPackage()->getExtra());
         if (!isset($options['gdbots-app']['constants-file'])) {
             $options['gdbots-app']['constants-file'] = static::$options['gdbots-app']['constants-file'];
         }
 
-        if (!isset($options['gdbots-app']['version'])) {
-            $options['gdbots-app']['version'] = null;
+        if (null === $version && isset($options['gdbots-app']['version'])) {
+            $version = $options['gdbots-app']['version'];
         }
 
         static::$options['gdbots-app']['constants-file'] = $constantsFile = $options['gdbots-app']['constants-file'];
@@ -38,8 +40,9 @@ class ScriptHandler
         $now = new \DateTime();
         list($appVendor, $appName) = explode('/', $event->getComposer()->getPackage()->getName());
         $appRootDir = realpath(getcwd());
-        $appVersion = $options['gdbots-app']['version'] ?: static::getAppVersion($appRootDir, $now);
-        $appBuild = self::getAppBuild($appRootDir, $now);
+        $appVersion = $version ?: static::getAppVersion($appRootDir, $now);
+        $appBuild = self::getAppBuild($now);
+        $appDeploymentId = self::getAppDeploymentId() ?: $appBuild;
         $appDevBranch = static::getAppDevBranch($appRootDir);
         $systemMacAddress = static::getSystemMacAddress();
         $cloudProvider = self::getCloudProvider();
@@ -49,18 +52,19 @@ class ScriptHandler
         $cloudInstanceType = self::getCloudInstanceType();
 
         $constants = [
-            'app_vendor' => $appVendor,
-            'app_name' => $appName,
-            'app_version' => $appVersion,
-            'app_build' => $appBuild,
-            'app_dev_branch' => $appDevBranch,
-            'system_mac_address' => $systemMacAddress,
-            'cloud_provider' => $cloudProvider,
-            'cloud_region' => $cloudRegion,
-            'cloud_zone' => $cloudZone,
-            'cloud_instance_id' => $cloudInstanceId,
+            'app_vendor'          => $appVendor,
+            'app_name'            => $appName,
+            'app_version'         => $appVersion,
+            'app_build'           => $appBuild,
+            'app_deployment_id'   => $appDeploymentId,
+            'app_dev_branch'      => $appDevBranch,
+            'system_mac_address'  => $systemMacAddress,
+            'cloud_provider'      => $cloudProvider,
+            'cloud_region'        => $cloudRegion,
+            'cloud_zone'          => $cloudZone,
+            'cloud_instance_id'   => $cloudInstanceId,
             'cloud_instance_type' => $cloudInstanceType,
-            'constants_file' => $constantsFile
+            'constants_file'      => $constantsFile,
         ];
 
         $event->getIO()->write(sprintf('<info>Writing constants to "%s"</info>', $appRootDir . '/' . $constantsFile));
@@ -79,6 +83,7 @@ define('APP_VENDOR', '$appVendor');
 define('APP_NAME', '$appName');
 define('APP_VERSION', '$appVersion');
 define('APP_BUILD', '$appBuild');
+define('APP_DEPLOYMENT_ID', '$appDeploymentId');
 define('APP_DEV_BRANCH', '$appDevBranch');
 define('APP_ROOT_DIR', realpath(__DIR__));
 define('SYSTEM_MAC_ADDRESS', '$systemMacAddress');
@@ -103,9 +108,10 @@ TEXT;
      * should probably be done there too.
      *
      * @param array $constants
+     *
      * @return string
      */
-    protected static function appendToConstantsFile(array $constants)
+    protected static function appendToConstantsFile(array $constants): string
     {
         return <<<TEXT
 /**
@@ -123,11 +129,12 @@ TEXT;
      * This is ONLY called if the composer.json extra config "['gdbots-app']['version']" has
      * not been set.
      *
-     * @param string $appRootDir
+     * @param string    $appRootDir
      * @param \DateTime $date
+     *
      * @return string
      */
-    protected static function getAppVersion($appRootDir, \DateTime $date)
+    protected static function getAppVersion(string $appRootDir, \DateTime $date): string
     {
         $fs = new Filesystem();
 
@@ -144,7 +151,7 @@ TEXT;
         if ($fs->exists('.svn/entries')) {
             ob_start();
             passthru("svnversion $appRootDir 2>&1");
-            $version = (int) trim(ob_get_clean());
+            $version = (int)trim(ob_get_clean());
             if (!empty($version)) {
                 return 'v' . $version;
             }
@@ -154,15 +161,25 @@ TEXT;
     }
 
     /**
-     * Determines the build or deployment id of the application.
+     * Determines the build of the application.
      *
-     * @param string $appRootDir
      * @param \DateTime $date
+     *
      * @return string
      */
-    protected static function getAppBuild($appRootDir, \DateTime $date)
+    protected static function getAppBuild(\DateTime $date): string
     {
         return getenv('APP_BUILD') ?: $date->format('YmdHis');
+    }
+
+    /**
+     * Determines the deployment id of the application.
+     *
+     * @return string
+     */
+    protected static function getAppDeploymentId(): ?string
+    {
+        return getenv('APP_DEPLOYMENT_ID') ?: null;
     }
 
     /**
@@ -170,9 +187,10 @@ TEXT;
      * and then from svn.  if those fail, just return 'master'.
      *
      * @param string $appRootDir
+     *
      * @return string
      */
-    protected static function getAppDevBranch($appRootDir)
+    protected static function getAppDevBranch(string $appRootDir): string
     {
         $fs = new Filesystem();
 
@@ -189,9 +207,10 @@ TEXT;
 
     /**
      * @param Filesystem $fs
+     *
      * @return string
      */
-    protected static function getCurrentGitBranch(Filesystem $fs)
+    protected static function getCurrentGitBranch(Filesystem $fs): string
     {
         ob_start();
         passthru('git symbolic-ref --short HEAD 2>&1');
@@ -206,9 +225,10 @@ TEXT;
 
     /**
      * @param string $appRootDir
+     *
      * @return string
      */
-    protected static function getCurrentSvnBranch($appRootDir)
+    protected static function getCurrentSvnBranch(string $appRootDir): string
     {
         ob_start();
         passthru("svn info $appRootDir 2>&1");
@@ -229,7 +249,7 @@ TEXT;
      *
      * @return string
      */
-    protected static function getSystemMacAddress()
+    protected static function getSystemMacAddress(): ?string
     {
         static $node = null;
         if (null !== $node) {
@@ -258,9 +278,10 @@ TEXT;
      * Returns the network interface configuration for the system
      *
      * @codeCoverageIgnore
+     *
      * @return string
      */
-    protected static function getIfconfig()
+    protected static function getIfconfig(): ?string
     {
         ob_start();
         switch (strtoupper(substr(php_uname('a'), 0, 3))) {
@@ -282,7 +303,7 @@ TEXT;
     /**
      * @return string
      */
-    protected static function getCloudProvider()
+    protected static function getCloudProvider(): string
     {
         return getenv('CLOUD_PROVIDER') ?: 'private';
     }
@@ -290,7 +311,7 @@ TEXT;
     /**
      * @return string
      */
-    protected static function getCloudRegion()
+    protected static function getCloudRegion(): string
     {
         return getenv('CLOUD_REGION') ?: '';
     }
@@ -298,7 +319,7 @@ TEXT;
     /**
      * @return string
      */
-    protected static function getCloudZone()
+    protected static function getCloudZone(): string
     {
         return getenv('CLOUD_ZONE') ?: '';
     }
@@ -306,7 +327,7 @@ TEXT;
     /**
      * @return string
      */
-    protected static function getCloudInstanceId()
+    protected static function getCloudInstanceId(): ?string
     {
         return getenv('CLOUD_INSTANCE_ID') ?: static::getSystemMacAddress();
     }
@@ -314,7 +335,7 @@ TEXT;
     /**
      * @return string
      */
-    protected static function getCloudInstanceType()
+    protected static function getCloudInstanceType(): string
     {
         return getenv('CLOUD_INSTANCE_TYPE') ?: '';
     }

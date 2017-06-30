@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Gdbots\Bundle\AppBundle\Twig;
 
@@ -17,6 +17,7 @@ class AppExtension extends \Twig_Extension implements \Twig_Extension_GlobalsInt
         'app_name',
         'app_version',
         'app_build',
+        'app_deployment_id',
         'app_dev_branch',
         'system_mac_address',
         'cloud_provider',
@@ -44,8 +45,9 @@ class AppExtension extends \Twig_Extension implements \Twig_Extension_GlobalsInt
      */
     public function getGlobals()
     {
+        $resolver = $this->container->get('gdbots_app.device_view_resolver');
         $globals = [
-            'device_view' => $this->container->get('gdbots_app.device_view_resolver')->resolve(getenv('DEVICE_VIEW')),
+            'device_view' => $resolver->resolve(getenv('DEVICE_VIEW') ?: null),
             'is_' . $this->container->getParameter('kernel.environment') . '_environment' => true,
         ];
 

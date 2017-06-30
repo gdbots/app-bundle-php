@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Gdbots\Bundle\AppBundle;
 
@@ -41,6 +41,15 @@ interface AppKernel extends KernelInterface
     public function getAppBuild(): string;
 
     /**
+     * An identifier for the deployment of this app.  This may be the same as the
+     * app build if it's not supported.  For example, AWS CodeDeploy provides a
+     * deployment id which is different from when the app was built/compiled.
+     *
+     * @return string
+     */
+    public function getAppDeploymentId(): string;
+
+    /**
      * When in development you can optionally define the dev branch that is being
      * used currently which is useful for customizing configuration, logging,
      * gearman channels, etc.  Default is "master".
@@ -51,6 +60,8 @@ interface AppKernel extends KernelInterface
 
     /**
      * Root directory where the application is deployed.
+     * This is the same as symfony project dir.
+     * @link https://symfony.com/blog/new-in-symfony-3-3-a-simpler-way-to-get-the-project-root-directory
      *
      * @return string
      */

@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Gdbots\Bundle\AppBundle;
 
@@ -52,7 +52,7 @@ class DeviceViewResolver
      */
     public function resolve(?string $view = null): string
     {
-        $view = $this->sanitize($view);
+        $view = $this->sanitize("{$view}");
         if ($this->isValid($view)) {
             return $view;
         }

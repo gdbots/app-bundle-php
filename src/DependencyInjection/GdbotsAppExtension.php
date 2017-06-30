@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Gdbots\Bundle\AppBundle\DependencyInjection;
 
@@ -11,20 +11,12 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 class GdbotsAppExtension extends Extension
 {
     /**
-     * @param array $config
+     * @param array            $config
      * @param ContainerBuilder $container
      */
     public function load(array $config, ContainerBuilder $container)
     {
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.xml');
-
-        /*
-        $this->addClassesToCompile([
-            'Gdbots\\Bundle\\AppBundle\\AbstractAppKernel',
-            'Gdbots\\Bundle\\AppBundle\\AppKernel',
-            'Gdbots\\Bundle\\AppBundle\\GdbotsAppBundle',
-        ]);
-        */
     }
 }

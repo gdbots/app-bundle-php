@@ -6,11 +6,11 @@
   "license": "Apache-2.0",
   "require": {
     "php": ">=7.1",
-    "symfony/symfony": "~3.2"
+    "symfony/symfony": "~3.3"
   },
   "require-dev": {
     "composer/composer": "1.0.*@dev",
-    "phpunit/phpunit": "~4.3"
+    "phpunit/phpunit": "~6.0"
   },
   "autoload": {
     "psr-4": {
@@ -28,6 +28,7 @@
     ],
     "post-update-cmd": [
       "Gdbots\\Bundle\\AppBundle\\Composer\\ScriptHandler::installConstantsFile"
-    ]
+    ],
+    "test": "vendor/bin/phpunit"
   }
 }
