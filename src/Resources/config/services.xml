@@ -4,8 +4,6 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
   <parameters>
-    <parameter key="gdbots_app.device_view_listener.class">Gdbots\Bundle\AppBundle\EventListener\DeviceViewListener</parameter>
-    <parameter key="gdbots_app.device_view_resolver.class">Gdbots\Bundle\AppBundle\DeviceViewResolver</parameter>
     <parameter key="gdbots_app.default_device_view">desktop</parameter>
     <parameter key="gdbots_app.enabled_device_views" type="collection">
       <parameter>desktop</parameter>
@@ -19,12 +17,12 @@
   </parameters>
 
   <services>
-    <service id="gdbots_app.device_view_listener" class="%gdbots_app.device_view_listener.class%">
+    <service id="gdbots_app.device_view_listener" class="Gdbots\Bundle\AppBundle\EventListener\DeviceViewListener" public="true">
       <argument type="service" id="gdbots_app.device_view_resolver"/>
       <tag name="kernel.event_subscriber"/>
     </service>
 
-    <service id="gdbots_app.device_view_resolver" class="%gdbots_app.device_view_resolver.class%">
+    <service id="gdbots_app.device_view_resolver" class="Gdbots\Bundle\AppBundle\DeviceViewResolver" public="true">
       <argument>%gdbots_app.default_device_view%</argument>
       <argument>%gdbots_app.enabled_device_views%</argument>
     </service>
