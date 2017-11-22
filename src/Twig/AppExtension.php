@@ -5,14 +5,14 @@ namespace Gdbots\Bundle\AppBundle\Twig;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class AppExtension extends \Twig_Extension implements \Twig_Extension_GlobalsInterface
+final class AppExtension extends \Twig_Extension implements \Twig_Extension_GlobalsInterface
 {
     /**
      * Constants from the container to return as globals for twig templating.
      *
-     * @var string[]
+     * @const string[]
      */
-    protected $appConstants = [
+    private const APP_GLOBALS = [
         'app_vendor',
         'app_name',
         'app_version',
@@ -30,7 +30,7 @@ class AppExtension extends \Twig_Extension implements \Twig_Extension_GlobalsInt
     ];
 
     /** @var ContainerInterface */
-    protected $container;
+    private $container;
 
     /**
      * @param ContainerInterface $container
@@ -46,12 +46,13 @@ class AppExtension extends \Twig_Extension implements \Twig_Extension_GlobalsInt
     public function getGlobals()
     {
         $resolver = $this->container->get('gdbots_app.device_view_resolver');
+        $env = $this->container->getParameter('kernel.environment');
         $globals = [
-            'device_view' => $resolver->resolve(getenv('DEVICE_VIEW') ?: null),
-            'is_' . $this->container->getParameter('kernel.environment') . '_environment' => true,
+            'device_view'                 => $resolver->resolve(getenv('DEVICE_VIEW') ?: null),
+            'is_' . $env . '_environment' => true,
         ];
 
-        foreach ($this->appConstants as $v) {
+        foreach (self::APP_GLOBALS as $v) {
             $globals[$v] = $this->container->getParameter($v);
         }
 

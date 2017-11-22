@@ -6,6 +6,16 @@ namespace Gdbots\Bundle\AppBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * Using this trait requires extending:
+ * @see \Symfony\Bundle\FrameworkBundle\Controller\Controller
+ *
+ * or a compatible alternative (with get and render methods).
+ *
+ * In order to support both Symfony 3 and 4 we've left the
+ * abstract methods off as their function signatures are
+ * different (v4 has scalar type hints).
+ */
 trait DeviceViewRendererTrait
 {
     /**
@@ -46,7 +56,7 @@ trait DeviceViewRendererTrait
      *
      * @return object
      */
-    abstract protected function get($id);
+    // abstract protected function get(string $id);
 
     /**
      * @param string   $view
@@ -55,5 +65,5 @@ trait DeviceViewRendererTrait
      *
      * @return Response
      */
-    abstract protected function render($view, array $parameters = [], Response $response = null);
+    // abstract protected function render(string $view, array $parameters = [], Response $response = null): Response;
 }

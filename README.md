@@ -62,7 +62,7 @@ Why not use environment variables for all of this?  In our use case, we generate
 using the composer `ScriptHandler` which has application details which are generated at build or deploy time
 and then would not change unless a new deploy happened.
 
-This happens when composer install runs or potentially Chef or CodeDeploy.  Composer json example:
+This happens when composer install runs or potentially Chef, CodeDeploy, etc.  composer.json example:
 
 ```json
 {

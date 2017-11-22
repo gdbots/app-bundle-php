@@ -23,10 +23,10 @@ namespace Gdbots\Bundle\AppBundle;
  * device view which should be used as is.
  *
  */
-class DeviceViewResolver
+final class DeviceViewResolver
 {
-    protected $enabledViews = [];
-    protected $default;
+    private $enabledViews = [];
+    private $default;
 
     /**
      * @param string $default
@@ -34,7 +34,7 @@ class DeviceViewResolver
      */
     public function __construct(string $default = 'desktop', array $enabledViews = [])
     {
-        foreach (($enabledViews ?: $this->getDefaultViews()) as $view) {
+        foreach ($enabledViews as $view) {
             $view = $this->sanitize($view);
             if (!empty($view)) {
                 $this->enabledViews[$view] = true;
@@ -65,7 +65,7 @@ class DeviceViewResolver
      *
      * @return string
      */
-    public function sanitize(string $view): string
+    private function sanitize(string $view): string
     {
         return strtolower(preg_replace('/[^a-zA-Z0-9]+/', '', $view));
     }
@@ -75,34 +75,8 @@ class DeviceViewResolver
      *
      * @return bool
      */
-    public function isValid(string $view): bool
+    private function isValid(string $view): bool
     {
         return !empty($view) && isset($this->enabledViews[$view]);
-    }
-
-    /**
-     * @param string $view
-     *
-     * @return bool
-     */
-    public function matchesDefault(string $view): bool
-    {
-        return $view === $this->default;
-    }
-
-    /**
-     * @return array
-     */
-    public function getEnabledViews(): array
-    {
-        return $this->enabledViews;
-    }
-
-    /**
-     * @return array
-     */
-    public function getDefaultViews(): array
-    {
-        return ['desktop', 'smartphone', 'featurephone', 'smarttv', 'app', 'tablet', 'robot'];
     }
 }

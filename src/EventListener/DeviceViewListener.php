@@ -11,23 +11,23 @@ use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
-class DeviceViewListener implements EventSubscriberInterface
+final class DeviceViewListener implements EventSubscriberInterface
 {
     /** @var DeviceViewResolver */
-    protected $deviceViewResolver;
+    private $resolver;
 
     /** @var string */
-    protected $deviceView;
+    private $deviceView;
 
     /** @var bool */
-    protected $hasInvalidCookie = false;
+    private $hasInvalidCookie = false;
 
     /**
-     * @param DeviceViewResolver $deviceViewResolver
+     * @param DeviceViewResolver $resolver
      */
-    public function __construct(DeviceViewResolver $deviceViewResolver)
+    public function __construct(DeviceViewResolver $resolver)
     {
-        $this->deviceViewResolver = $deviceViewResolver;
+        $this->resolver = $resolver;
     }
 
     /**
@@ -65,11 +65,11 @@ class DeviceViewListener implements EventSubscriberInterface
      *
      * @return string
      */
-    protected function getDeviceView(Request $request): string
+    private function getDeviceView(Request $request): string
     {
         if (null === $this->deviceView) {
             $envValue = $request->server->get('DEVICE_VIEW');
-            $this->deviceView = $this->deviceViewResolver->resolve($envValue);
+            $this->deviceView = $this->resolver->resolve($envValue);
             if ($envValue !== $this->deviceView) {
                 $this->hasInvalidCookie = true;
                 $request->cookies->remove('device_view');

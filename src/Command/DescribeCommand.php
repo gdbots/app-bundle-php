@@ -9,7 +9,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\HttpKernel\Kernel;
 
-class DescribeCommand extends ContainerAwareCommand
+final class DescribeCommand extends ContainerAwareCommand
 {
     /**
      * {@inheritdoc}
@@ -43,6 +43,7 @@ class DescribeCommand extends ContainerAwareCommand
             'app_build',
             'app_deployment_id',
             'app_dev_branch',
+            'app_root_dir',
             'system_mac_address',
             'cloud_provider',
             'cloud_region',
@@ -53,6 +54,11 @@ class DescribeCommand extends ContainerAwareCommand
             'is_not_production',
             'kernel.environment',
             'kernel.debug',
+            'kernel.root_dir',
+            'kernel.project_dir',
+            'kernel.cache_dir',
+            'kernel.logs_dir',
+            'kernel.tmp_dir',
             'kernel.bundles',
         ];
 

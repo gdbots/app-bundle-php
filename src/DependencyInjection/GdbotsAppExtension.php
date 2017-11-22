@@ -8,7 +8,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
-class GdbotsAppExtension extends Extension
+final class GdbotsAppExtension extends Extension
 {
     /**
      * @param array            $config
