@@ -101,7 +101,7 @@ the deployment was successful.  The console command `console app:describe` can r
 Example output from the command:
 ```json
 {
-  "symfony_version": "3.2.3",
+  "symfony_version": "4.0.0",
   "app_vendor": "acme",
   "app_name": "blog",
   "app_version": "v0.1.0",
