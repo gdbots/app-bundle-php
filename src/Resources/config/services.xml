@@ -10,6 +10,7 @@
       <parameter>smartphone</parameter>
       <parameter>featurephone</parameter>
       <parameter>smarttv</parameter>
+      <parameter>smartwatch</parameter>
       <parameter>app</parameter>
       <parameter>tablet</parameter>
       <parameter>robot</parameter>
@@ -17,7 +18,11 @@
   </parameters>
 
   <services>
-    <service id="gdbots_app.device_view_listener" class="Gdbots\Bundle\AppBundle\EventListener\DeviceViewListener" public="true">
+    <prototype namespace="Gdbots\Bundle\AppBundle\Command\" resource="../../Command/*">
+      <tag name="console.command"/>
+    </prototype>
+
+    <service id="gdbots_app.device_view_listener" class="Gdbots\Bundle\AppBundle\EventListener\DeviceViewListener" public="false">
       <argument type="service" id="gdbots_app.device_view_resolver"/>
       <tag name="kernel.event_subscriber"/>
     </service>

@@ -1,17 +1,17 @@
 {
   "name": "gdbots/app-bundle",
   "homepage": "https://github.com/gdbots/app-bundle",
-  "description": "App bundle for Symfony (v3 or v4) apps.",
+  "description": "App bundle for Symfony apps.",
   "type": "library",
   "license": "Apache-2.0",
   "require": {
     "php": ">=7.1",
-    "symfony/console": "^3.3 || ^4.0",
-    "symfony/framework-bundle": "^3.3 || ^4.0",
+    "symfony/console": "^4.0",
+    "symfony/framework-bundle": "^4.0",
     "twig/twig": "^2.4"
   },
   "require-dev": {
-    "composer/composer": "^1.5",
+    "composer/composer": "dev-master",
     "phpunit/phpunit": "^6.4"
   },
   "autoload": {

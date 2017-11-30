@@ -59,15 +59,6 @@ interface AppKernel extends KernelInterface
     public function getAppDevBranch(): string;
 
     /**
-     * Root directory where the application is deployed.
-     * This is the same as symfony project dir.
-     * @link https://symfony.com/blog/new-in-symfony-3-3-a-simpler-way-to-get-the-project-root-directory
-     *
-     * @return string
-     */
-    public function getAppRootDir(): string;
-
-    /**
      * A media access control address (MAC address), also called physical address,
      * is a unique identifier assigned to network interfaces.
      * @link https://en.wikipedia.org/wiki/MAC_address
@@ -110,4 +101,27 @@ interface AppKernel extends KernelInterface
      * @return string
      */
     public function getCloudInstanceType(): string;
+
+    /**
+     * Gets the project directory (root of app).
+     *
+     * @link https://symfony.com/blog/new-in-symfony-3-3-a-simpler-way-to-get-the-project-root-directory
+     *
+     * @return string
+     */
+    public function getProjectDir();
+
+    /**
+     * Gets the project's config directory.
+     *
+     * @return string
+     */
+    public function getConfigDir();
+
+    /**
+     * Gets the project's tmp directory.
+     *
+     * @return string
+     */
+    public function getTmpDir();
 }
