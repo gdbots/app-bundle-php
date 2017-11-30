@@ -2,7 +2,7 @@
   "name": "gdbots/app-bundle",
   "homepage": "https://github.com/gdbots/app-bundle",
   "description": "App bundle for Symfony apps.",
-  "type": "library",
+  "type": "symfony-bundle",
   "license": "Apache-2.0",
   "require": {
     "php": ">=7.1",

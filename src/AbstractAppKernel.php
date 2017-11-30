@@ -250,7 +250,7 @@ abstract class AbstractAppKernel extends Kernel implements AppKernel
 
         // convenient flags for environments
         $env = strtolower(trim($this->environment));
-        $parameters['is_production'] = 'prod' === $env || 'production' === $env ? true : false;
+        $parameters['is_production'] = 'prod' === $env || 'production' === $env;
         $parameters['is_not_production'] = !$parameters['is_production'];
 
         return $parameters;

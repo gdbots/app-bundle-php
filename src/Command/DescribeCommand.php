@@ -43,7 +43,6 @@ final class DescribeCommand extends ContainerAwareCommand
             'app_build',
             'app_deployment_id',
             'app_dev_branch',
-            'app_root_dir',
             'system_mac_address',
             'cloud_provider',
             'cloud_region',
