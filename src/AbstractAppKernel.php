@@ -3,8 +3,11 @@ declare(strict_types=1);
 
 namespace Gdbots\Bundle\AppBundle;
 
+use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\Config\Loader\LoaderInterface;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Kernel;
+use Symfony\Component\Routing\RouteCollectionBuilder;
 
 /**
  * Using this class assumes the use of @see \Gdbots\Bundle\AppBundle\Composer\ScriptHandler::installConstantsFile
@@ -15,15 +18,60 @@ use Symfony\Component\HttpKernel\Kernel;
  */
 abstract class AbstractAppKernel extends Kernel implements AppKernel
 {
+    use MicroKernelTrait;
+
+    protected const CONFIG_EXTS = '.{php,xml,yaml,yml}';
+
     /** @var string */
     protected $appBuild;
 
     /**
-     * @param LoaderInterface $loader
+     * {@inheritdoc}
      */
-    public function registerContainerConfiguration(LoaderInterface $loader)
+    public function registerBundles()
     {
-        $loader->load($this->getRootDir() . '/config/config_' . $this->getEnvironment() . '.yml');
+        $contents = require $this->getConfigDir() . '/bundles.php';
+        foreach ($contents as $class => $envs) {
+            if (isset($envs['all']) || isset($envs[$this->environment])) {
+                yield new $class();
+            }
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function configureContainer(ContainerBuilder $container, LoaderInterface $loader)
+    {
+        $container->setParameter('container.dumper.inline_class_loader', true);
+        $confDir = $this->getConfigDir();
+
+        $loader->load($confDir . '/packages/*' . static::CONFIG_EXTS, 'glob');
+
+        if (is_dir($confDir . '/packages/' . $this->environment)) {
+            $loader->load($confDir . '/packages/' . $this->environment . '/**/*' . static::CONFIG_EXTS, 'glob');
+        }
+
+        $loader->load($confDir . '/services' . static::CONFIG_EXTS, 'glob');
+        $loader->load($confDir . '/services_' . $this->environment . static::CONFIG_EXTS, 'glob');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function configureRoutes(RouteCollectionBuilder $routes)
+    {
+        $confDir = $this->getConfigDir();
+
+        if (is_dir($confDir . '/routes/')) {
+            $routes->import($confDir . '/routes/*' . static::CONFIG_EXTS, '/', 'glob');
+        }
+
+        if (is_dir($confDir . '/routes/' . $this->environment)) {
+            $routes->import($confDir . '/routes/' . $this->environment . '/**/*' . static::CONFIG_EXTS, '/', 'glob');
+        }
+
+        $routes->import($confDir . '/routes' . static::CONFIG_EXTS, '/', 'glob');
     }
 
     /**
@@ -89,22 +137,6 @@ abstract class AbstractAppKernel extends Kernel implements AppKernel
     /**
      * {@inheritdoc}
      */
-    public function getAppRootDir(): string
-    {
-        return APP_ROOT_DIR;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getProjectDir()
-    {
-        return APP_ROOT_DIR;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getSystemMacAddress(): string
     {
         return SYSTEM_MAC_ADDRESS;
@@ -151,41 +183,27 @@ abstract class AbstractAppKernel extends Kernel implements AppKernel
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
-    public function getName()
+    public function getProjectDir()
     {
-        if (null === $this->name) {
-            $this->name = str_replace(['_', '\\', 'Kernel'], '', static::class);
-        }
-
-        return $this->name;
+        return APP_ROOT_DIR;
     }
 
     /**
-     * Assumes your app is in the "app" dir.  If you're running multiple kernels in different
-     * folders then you'll need to override this in your concrete kernel.
-     *
-     * But, in general, it's advised to use the standard app folder structure.
-     *
-     * @return string
+     * {@inheritdoc}
      */
-    public function getRootDir()
+    public function getConfigDir()
     {
-        return $this->getProjectDir() . '/app';
+        return $_SERVER['APP_CONFIG_DIR'] ?? $this->getProjectDir() . '/config';
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getCacheDir()
     {
-        $dir = getenv('APP_CACHE_DIR');
-        if ($dir) {
-            return $dir;
-        }
-
-        return $this->getProjectDir() . '/var/cache/' . $this->environment;
+        return $_SERVER['APP_CACHE_DIR'] ?? $this->getProjectDir() . '/var/cache/' . $this->environment;
     }
 
     /**
@@ -193,25 +211,15 @@ abstract class AbstractAppKernel extends Kernel implements AppKernel
      */
     public function getLogDir()
     {
-        $dir = getenv('APP_LOGS_DIR');
-        if ($dir) {
-            return $dir;
-        }
-
-        return $this->getProjectDir() . '/var/logs';
+        return $_SERVER['APP_LOGS_DIR'] ?? $this->getProjectDir() . '/var/logs';
     }
 
     /**
      * @return string
      */
-    public function getTmpDir(): string
+    public function getTmpDir()
     {
-        $dir = getenv('APP_TMP_DIR');
-        if ($dir) {
-            return $dir;
-        }
-
-        return $this->getProjectDir() . '/var/tmp';
+        return $_SERVER['APP_TMP_DIR'] ?? $this->getProjectDir() . '/var/tmp';
     }
 
     /**
@@ -228,7 +236,6 @@ abstract class AbstractAppKernel extends Kernel implements AppKernel
         $parameters['app_build'] = $this->getAppBuild();
         $parameters['app_deployment_id'] = $this->getAppDeploymentId();
         $parameters['app_dev_branch'] = $this->getAppDevBranch();
-        $parameters['app_root_dir'] = $this->getAppRootDir();
         $parameters['system_mac_address'] = $this->getSystemMacAddress();
         $parameters['cloud_provider'] = $this->getCloudProvider();
         $parameters['cloud_region'] = $this->getCloudRegion();
@@ -236,14 +243,14 @@ abstract class AbstractAppKernel extends Kernel implements AppKernel
         $parameters['cloud_instance_id'] = $this->getCloudInstanceId();
         $parameters['cloud_instance_type'] = $this->getCloudInstanceType();
 
+        $parameters['kernel.config_dir'] = $this->getConfigDir();
         if (!isset($parameters['kernel.tmp_dir'])) {
             $parameters['kernel.tmp_dir'] = realpath($this->getTmpDir()) ?: $this->getTmpDir();
         }
 
         // convenient flags for environments
         $env = strtolower(trim($this->environment));
-        $parameters['is_' . $env . '_environment'] = true;
-        $parameters['is_production'] = 'prod' === $env || 'production' === $env ? true : false;
+        $parameters['is_production'] = 'prod' === $env || 'production' === $env;
         $parameters['is_not_production'] = !$parameters['is_production'];
 
         return $parameters;

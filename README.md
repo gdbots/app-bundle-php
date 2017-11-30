@@ -31,7 +31,6 @@ The kernel also injects that data into the kernel parameters:
         $parameters['app_build'] = $this->getAppBuild();
         $parameters['app_deployment_id'] = $this->getAppDeploymentId();
         $parameters['app_dev_branch'] = $this->getAppDevBranch();
-        $parameters['app_root_dir'] = $this->getAppRootDir();
         $parameters['system_mac_address'] = $this->getSystemMacAddress();
         $parameters['cloud_provider'] = $this->getCloudProvider();
         $parameters['cloud_region'] = $this->getCloudRegion();
@@ -39,13 +38,13 @@ The kernel also injects that data into the kernel parameters:
         $parameters['cloud_instance_id'] = $this->getCloudInstanceId();
         $parameters['cloud_instance_type'] = $this->getCloudInstanceType();
 
+        $parameters['kernel.config_dir'] = $this->getConfigDir();
         if (!isset($parameters['kernel.tmp_dir'])) {
             $parameters['kernel.tmp_dir'] = realpath($this->getTmpDir()) ?: $this->getTmpDir();
         }
 
         // convenient flags for environments
         $env = strtolower(trim($this->environment));
-        $parameters['is_' . $env . '_environment'] = true;
         $parameters['is_production'] = 'prod' === $env || 'production' === $env ? true : false;
         $parameters['is_not_production'] = !$parameters['is_production'];
 
@@ -67,12 +66,9 @@ This happens when composer install runs or potentially Chef, CodeDeploy, etc.  c
 ```json
 {
   "scripts": {
-    "install-parameters": "php -r \"if (file_exists('app/config/parameters.yml')) exit; copy('app/config/parameters.yml.dist', 'app/config/parameters.yml');\"",
     "symfony-scripts": [
       "@install-parameters",
       "Gdbots\\Bundle\\AppBundle\\Composer\\ScriptHandler::installConstantsFile",
-      "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
-      "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile"
     ],
     "post-install-cmd": [
       "@symfony-scripts"
@@ -105,7 +101,7 @@ the deployment was successful.  The console command `console app:describe` can r
 Example output from the command:
 ```json
 {
-  "symfony_version": "3.2.3",
+  "symfony_version": "4.0.0",
   "app_vendor": "acme",
   "app_name": "blog",
   "app_version": "v0.1.0",

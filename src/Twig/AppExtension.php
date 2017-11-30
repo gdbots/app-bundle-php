@@ -46,11 +46,7 @@ final class AppExtension extends \Twig_Extension implements \Twig_Extension_Glob
     public function getGlobals()
     {
         $resolver = $this->container->get('gdbots_app.device_view_resolver');
-        $env = $this->container->getParameter('kernel.environment');
-        $globals = [
-            'device_view'                 => $resolver->resolve(getenv('DEVICE_VIEW') ?: null),
-            'is_' . $env . '_environment' => true,
-        ];
+        $globals = ['device_view' => $resolver->resolve($_SERVER['DEVICE_VIEW'] ?? null)];
 
         foreach (self::APP_GLOBALS as $v) {
             $globals[$v] = $this->container->getParameter($v);
