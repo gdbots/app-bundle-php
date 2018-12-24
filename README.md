@@ -5,14 +5,11 @@ app-bundle-php
 [![Code Climate](https://codeclimate.com/github/gdbots/app-bundle-php/badges/gpa.svg)](https://codeclimate.com/github/gdbots/app-bundle-php)
 [![Test Coverage](https://codeclimate.com/github/gdbots/app-bundle-php/badges/coverage.svg)](https://codeclimate.com/github/gdbots/app-bundle-php/coverage)
 
-App bundle for symfony apps which provides a base app kernel, device view awareness and a composer script
-handler to produce a constants file with app details.
+App bundle for symfony apps which provides a base app kernel, device view awareness and a composer script handler to produce a constants file with app details.
 
 
 ## AppKernel
-Provides an AppKernel interface and an `AbstractAppKernel` which must be extended in your own app.  This
-class provides some basic methods for describing the environment the kernel is running in (cloud provider, region, etc.)
-and the app details like vendor, package, version, build, etc.
+Provides an AppKernel interface and an `AbstractAppKernel` which must be extended in your own app.  This class provides some basic methods for describing the environment the kernel is running in (cloud provider, region, etc.) and the app details like vendor, package, version, build, etc.
 
 The kernel also injects that data into the kernel parameters:
 
@@ -57,9 +54,7 @@ These can then be used in symfony app configs:
   my_bucket: 'https://s3-%cloud_region%.amazonaws.com/my-bucket-%kernel.environment%-%cloud_region%'
 ```
 
-Why not use environment variables for all of this?  In our use case, we generate the `.constants.php` file
-using the composer `ScriptHandler` which has application details which are generated at build or deploy time
-and then would not change unless a new deploy happened.
+Why not use environment variables for all of this?  In our use case, we generate the `.constants.php` file using the composer `ScriptHandler` which has application details which are generated at build or deploy time and then would not change unless a new deploy happened.
 
 This happens when composer install runs or potentially Chef, CodeDeploy, etc.  composer.json example:
 
@@ -95,8 +90,7 @@ sed -i "/CLOUD_INSTANCE_TYPE/s/'[^']*'/'${CLOUD_INSTANCE_TYPE}'/2" .constants.ph
 
 
 ## Console Commands
-When an app is deployed we need to execute a symfony command and/or curl the app to verify
-the deployment was successful.  The console command `console app:describe` can return the app details.
+When an app is deployed we need to execute a symfony command and/or curl the app to verify the deployment was successful.  The console command `console app:describe` can return the app details.
 
 Example output from the command:
 ```json
@@ -153,19 +147,15 @@ fi
 
 
 ## Device View Awareness
-If device detection is in use and was evaluated for the current request a string identifying the 
-"view" that is to be delivered to the user will be pushed into an environment variable by the server.
+If device detection is in use and was evaluated for the current request a string identifying the "view" that is to be delivered to the user will be pushed into an environment variable by the server.
 
-This string is completely up to the app developer as what view is given to the user is not necessarily 
-going to match exactly to the form factor of the device.
+This string is completely up to the app developer as what view is given to the user is not necessarily going to match exactly to the form factor of the device.
 
 For example, a smarttv might be shown the "desktop" view of the app.
 
 Examples: desktop, smartphone, smarttv, etc. <https://www.scientiamobile.com/wurflCapability>
 
-This bundle doesn't provide any detection, it merely injects the "decision" into the request attributes
-and provides some methods to make template resolution simple.  The actual detection is done by a tool
-better suited for that, like CloudFront.  For example, in an Apache rewrite rule:
+This bundle doesn't provide any detection, it merely injects the "decision" into the request attributes and provides some methods to make template resolution simple.  The actual detection is done by a tool better suited for that, like CloudFront.  For example, in an Apache rewrite rule:
 
 ```
   RewriteCond %{HTTP:CloudFront-Is-Mobile-Viewer} =true
@@ -173,8 +163,7 @@ better suited for that, like CloudFront.  For example, in an Apache rewrite rule
   RewriteRule ^ - [E=DEVICE_VIEW:smartphone]
 ```
 
-The "device_view" would now equal "smartphone" and be available as a twig variable, a request attribute or
-an environment variable.  Example use in a controller:
+The "device_view" would now equal "smartphone" and be available as a twig variable, a request attribute or an environment variable.  Example use in a controller:
 
 ```php
 declare(strict_types=1);
@@ -203,10 +192,21 @@ final class DefaultController extends Controller
     }
 }
 ```
-Using [Twig dynamic inheritance](http://twig.sensiolabs.org/doc/2.x/tags/extends.html#dynamic-inheritance) you 
-can make use of the `device_view` variable to provide a device specific layout when available.
+Using [Twig dynamic inheritance](http://twig.sensiolabs.org/doc/2.x/tags/extends.html#dynamic-inheritance) you can make use of the `device_view` variable to provide a device specific layout when available.
 ```twig
 {% extends ['layout.' ~ device_view ~ '.twig.html', 'layout.twig.html'] %}
 
 I'm on a {{ device_view }}.
 ```
+
+
+## Viewer Country Awareness
+Using the same strategy as device view, this value contains the viewer's country.  This string should be a two digit ISO country code, all uppercase or null.
+
+This bundle doesn't provide any detection, it merely injects the "decision" into the request attributes and provides some methods to make template resolution simple.  The actual detection is done by a tool better suited for that, like CloudFront.  For example, in an Apache rewrite rule:
+
+```
+  RewriteCond %{HTTP:CloudFront-Viewer-Country} ([A-Z0-9]{2})
+  RewriteRule ^ - [E=VIEWER_COUNTRY:%1]
+```
+You can reference the value in Symfony request with `$request->attributes->get('viewer_country')` or in twig with `I'm in {{ viewer_country }}.`
