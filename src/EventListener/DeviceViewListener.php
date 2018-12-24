@@ -37,6 +37,10 @@ final class DeviceViewListener implements EventSubscriberInterface
     {
         $request = $event->getRequest();
         $request->attributes->set('device_view', $this->getDeviceView($request));
+        $viewerCountry = strtoupper(trim($request->server->get('VIEWER_COUNTRY', '')));
+        if (!empty($viewerCountry)) {
+            $request->attributes->set('viewer_country', $viewerCountry);
+        }
     }
 
     /**
