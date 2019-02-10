@@ -8,6 +8,24 @@ use Symfony\Component\HttpKernel\KernelInterface;
 interface AppKernel extends KernelInterface
 {
     /**
+     * The application environment we are running. This is different than
+     * symfony env or kernel environment though they may seem the same.
+     * The reason for this is that when we generate a docker image for
+     * symfony we want to prime the cache so bootup is super fast.  The
+     * only way to do that is by knowing the "environment" ahead of time,
+     * this of course is difficult when you want to reuse the same image
+     * across many environments. The solution is to use symfony environment
+     * as a "distribution" or "provider", like "aws", "gce".
+     *
+     * tldr;
+     *  - app_env = dev, test, stage, prod, etc.
+     *  - kernel/symfony env = aws, private, gce, azure
+     *
+     * @return string
+     */
+    public function getAppEnv(): string;
+
+    /**
      * Creator of the application, typically your company name.
      * (if using composer, the first part of the package name before the "/")
      *

@@ -329,7 +329,7 @@ TEXT;
      */
     protected static function getCloudInstanceId(): ?string
     {
-        return getenv('CLOUD_INSTANCE_ID') ?: static::getSystemMacAddress();
+        return getenv('CLOUD_INSTANCE_ID') ?: str_replace([':', '-'], '', static::getSystemMacAddress());
     }
 
     /**

@@ -77,6 +77,14 @@ abstract class AbstractAppKernel extends Kernel implements AppKernel
     /**
      * {@inheritdoc}
      */
+    public function getAppEnv(): string
+    {
+        return $_SERVER['APP_ENV'] ?? 'dev';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getAppVendor(): string
     {
         return APP_VENDOR;
@@ -171,7 +179,7 @@ abstract class AbstractAppKernel extends Kernel implements AppKernel
      */
     public function getCloudInstanceId(): string
     {
-        return CLOUD_INSTANCE_ID ?: $this->getSystemMacAddress();
+        return CLOUD_INSTANCE_ID ?: str_replace([':', '-'], '', $this->getSystemMacAddress());
     }
 
     /**
@@ -230,6 +238,7 @@ abstract class AbstractAppKernel extends Kernel implements AppKernel
     protected function getKernelParameters()
     {
         $parameters = parent::getKernelParameters();
+        $parameters['app_env'] = $this->getAppEnv();
         $parameters['app_vendor'] = $this->getAppVendor();
         $parameters['app_name'] = $this->getAppName();
         $parameters['app_version'] = $this->getAppVersion();
@@ -249,7 +258,7 @@ abstract class AbstractAppKernel extends Kernel implements AppKernel
         }
 
         // convenient flags for environments
-        $env = strtolower(trim($this->environment));
+        $env = strtolower(trim($parameters['app_env']));
         $parameters['is_production'] = 'prod' === $env || 'production' === $env;
         $parameters['is_not_production'] = !$parameters['is_production'];
 

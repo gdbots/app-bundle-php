@@ -13,6 +13,7 @@ final class AppExtension extends \Twig_Extension implements \Twig_Extension_Glob
      * @const string[]
      */
     private const APP_GLOBALS = [
+        'app_env',
         'app_vendor',
         'app_name',
         'app_version',

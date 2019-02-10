@@ -2,6 +2,10 @@
 This changelog references the relevant changes done in 0.x versions.
 
 
+## v0.4.2
+* Add `app_env` as parameter and twig global. This is replacing `SYMFONY_ENV` and `kernel.environment` or `app.environment` as those will now be provider specific so booting containers and have symfony cache primed!
+
+
 ## v0.4.1
 * Add `viewer_country` to request attributes and twig globals. In the same spirit of `device_view` awareness this value makes it simpler to address differences you must account for in a given country, e.g. for GDPR reasons.
 

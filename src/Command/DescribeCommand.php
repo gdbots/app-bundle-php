@@ -37,6 +37,7 @@ final class DescribeCommand extends ContainerAwareCommand
     {
         $container = $this->getContainer();
         $keys = [
+            'app_env',
             'app_vendor',
             'app_name',
             'app_version',
