@@ -3,6 +3,8 @@ This changelog references the relevant changes done in 0.x versions.
 
 
 ## v0.5.0
+__BREAKING CHANGES__
+
 * Remove `ScriptHandler` and convert all those constants to environment variables.
 
 
