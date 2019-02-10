@@ -50,8 +50,6 @@ final class DescribeCommand extends ContainerAwareCommand
             'cloud_zone',
             'cloud_instance_id',
             'cloud_instance_type',
-            'is_production',
-            'is_not_production',
             'kernel.environment',
             'kernel.debug',
             'kernel.project_dir',

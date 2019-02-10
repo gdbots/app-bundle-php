@@ -2,6 +2,10 @@
 This changelog references the relevant changes done in 0.x versions.
 
 
+## v0.5.0
+* Remove `ScriptHandler` and convert all those constants to environment variables.
+
+
 ## v0.4.2
 * Add `app_env` as parameter and twig global. This is replacing `SYMFONY_ENV` and `kernel.environment` or `app.environment` as those will now be provider specific so booting containers and have symfony cache primed!
 

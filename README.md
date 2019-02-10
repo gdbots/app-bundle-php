@@ -5,88 +5,11 @@ app-bundle-php
 [![Code Climate](https://codeclimate.com/github/gdbots/app-bundle-php/badges/gpa.svg)](https://codeclimate.com/github/gdbots/app-bundle-php)
 [![Test Coverage](https://codeclimate.com/github/gdbots/app-bundle-php/badges/coverage.svg)](https://codeclimate.com/github/gdbots/app-bundle-php/coverage)
 
-App bundle for symfony apps which provides a base app kernel, device view awareness and a composer script handler to produce a constants file with app details.
+App bundle for symfony apps which provides a base app kernel, device view and viewer country awareness.
 
 
 ## AppKernel
 Provides an AppKernel interface and an `AbstractAppKernel` which must be extended in your own app.  This class provides some basic methods for describing the environment the kernel is running in (cloud provider, region, etc.) and the app details like vendor, package, version, build, etc.
-
-The kernel also injects that data into the kernel parameters:
-
-```php
-    /**
-     * Calls parent to get builtin kernel parameters and then adds a few key settings.
-     *
-     * @return array
-     */
-    protected function getKernelParameters()
-    {
-        $parameters = parent::getKernelParameters();
-        $parameters['app_vendor'] = $this->getAppVendor();
-        $parameters['app_name'] = $this->getAppName();
-        $parameters['app_version'] = $this->getAppVersion();
-        $parameters['app_build'] = $this->getAppBuild();
-        $parameters['app_deployment_id'] = $this->getAppDeploymentId();
-        $parameters['app_dev_branch'] = $this->getAppDevBranch();
-        $parameters['system_mac_address'] = $this->getSystemMacAddress();
-        $parameters['cloud_provider'] = $this->getCloudProvider();
-        $parameters['cloud_region'] = $this->getCloudRegion();
-        $parameters['cloud_zone'] = $this->getCloudZone();
-        $parameters['cloud_instance_id'] = $this->getCloudInstanceId();
-        $parameters['cloud_instance_type'] = $this->getCloudInstanceType();
-
-        $parameters['kernel.config_dir'] = $this->getConfigDir();
-        if (!isset($parameters['kernel.tmp_dir'])) {
-            $parameters['kernel.tmp_dir'] = realpath($this->getTmpDir()) ?: $this->getTmpDir();
-        }
-
-        // convenient flags for environments
-        $env = strtolower(trim($this->environment));
-        $parameters['is_production'] = 'prod' === $env || 'production' === $env ? true : false;
-        $parameters['is_not_production'] = !$parameters['is_production'];
-
-        return $parameters;
-    }
-```
-These can then be used in symfony app configs:
-
-```yaml
-  my_bucket: 'https://s3-%cloud_region%.amazonaws.com/my-bucket-%kernel.environment%-%cloud_region%'
-```
-
-Why not use environment variables for all of this?  In our use case, we generate the `.constants.php` file using the composer `ScriptHandler` which has application details which are generated at build or deploy time and then would not change unless a new deploy happened.
-
-This happens when composer install runs or potentially Chef, CodeDeploy, etc.  composer.json example:
-
-```json
-{
-  "scripts": {
-    "symfony-scripts": [
-      "@install-parameters",
-      "Gdbots\\Bundle\\AppBundle\\Composer\\ScriptHandler::installConstantsFile",
-    ],
-    "post-install-cmd": [
-      "@symfony-scripts"
-    ],
-    "post-update-cmd": [
-      "@symfony-scripts"
-    ],
-    "test": "vendor/bin/phpunit"
-  }
-}
-```
-
-CodeDeploy provisioning script example:
-```bash
-sed -i "/APP_DEPLOYMENT_ID/s/'[^']*'/'${DEPLOYMENT_ID}'/2" .constants.php
-sed -i "/APP_DEV_BRANCH/s/'[^']*'/'${APP_BRANCH}'/2" .constants.php
-sed -i "/SYSTEM_MAC_ADDRESS/s/'[^']*'/'${SYSTEM_MAC_ADDRESS}'/2" .constants.php
-sed -i "/CLOUD_PROVIDER/s/'[^']*'/'${CLOUD_PROVIDER}'/2" .constants.php
-sed -i "/CLOUD_REGION/s/'[^']*'/'${CLOUD_REGION}'/2" .constants.php
-sed -i "/CLOUD_ZONE/s/'[^']*'/'${CLOUD_ZONE}'/2" .constants.php
-sed -i "/CLOUD_INSTANCE_ID/s/'[^']*'/'${CLOUD_INSTANCE_ID}'/2" .constants.php
-sed -i "/CLOUD_INSTANCE_TYPE/s/'[^']*'/'${CLOUD_INSTANCE_TYPE}'/2" .constants.php
-```
 
 
 ## Console Commands
@@ -108,8 +31,6 @@ Example output from the command:
   "cloud_zone": "us-west-2a",
   "cloud_instance_id": "080027a450f9",
   "cloud_instance_type": "vbox",
-  "is_production": false,
-  "is_not_production": true,
   "kernel_environment": "local",
   "kernel_debug": true,
   "kernel_bundles": {

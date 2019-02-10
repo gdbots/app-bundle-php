@@ -26,8 +26,6 @@ final class AppExtension extends \Twig_Extension implements \Twig_Extension_Glob
         'cloud_zone',
         'cloud_instance_id',
         'cloud_instance_type',
-        'is_production',
-        'is_not_production',
     ];
 
     /** @var ContainerInterface */

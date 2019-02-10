@@ -9,13 +9,6 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Routing\RouteCollectionBuilder;
 
-/**
- * Using this class assumes the use of @see \Gdbots\Bundle\AppBundle\Composer\ScriptHandler::installConstantsFile
- * and having it run in the "post-install-cmd" and "post-update-cmd" composer event hooks.
- *
- * The constants written to your project's document root (by default into .constants.php) are then
- * included, ideally via composer "files" before any of your code runs.
- */
 abstract class AbstractAppKernel extends Kernel implements AppKernel
 {
     use MicroKernelTrait;
@@ -87,7 +80,7 @@ abstract class AbstractAppKernel extends Kernel implements AppKernel
      */
     public function getAppVendor(): string
     {
-        return APP_VENDOR;
+        return $_SERVER['APP_VENDOR'] ?? 'unknown';
     }
 
     /**
@@ -95,7 +88,7 @@ abstract class AbstractAppKernel extends Kernel implements AppKernel
      */
     public function getAppName(): string
     {
-        return APP_NAME;
+        return $_SERVER['APP_NAME'] ?? 'unknown';
     }
 
     /**
@@ -103,7 +96,7 @@ abstract class AbstractAppKernel extends Kernel implements AppKernel
      */
     public function getAppVersion(): string
     {
-        return APP_VERSION;
+        return $_SERVER['APP_VERSION'] ?? 'N.N.N';
     }
 
     /**
@@ -112,10 +105,11 @@ abstract class AbstractAppKernel extends Kernel implements AppKernel
     public function getAppBuild(): string
     {
         if (null === $this->appBuild) {
+            $build = (string)explode('.', (string)$this->getStartTime())[0];
             if ($this->isDebug()) {
-                $this->appBuild = (string)explode('.', (string)$this->getStartTime())[0];
+                $this->appBuild = $build;
             } else {
-                $this->appBuild = APP_BUILD;
+                $this->appBuild = $_SERVER['APP_BUILD'] ?? $build;
             }
         }
 
@@ -131,7 +125,7 @@ abstract class AbstractAppKernel extends Kernel implements AppKernel
             return $this->getAppBuild();
         }
 
-        return APP_DEPLOYMENT_ID;
+        return $_SERVER['APP_DEPLOYMENT_ID'] ?? $this->getAppBuild();
     }
 
     /**
@@ -139,7 +133,7 @@ abstract class AbstractAppKernel extends Kernel implements AppKernel
      */
     public function getAppDevBranch(): string
     {
-        return APP_DEV_BRANCH;
+        return $_SERVER['APP_DEV_BRANCH'] ?? 'master';
     }
 
     /**
@@ -147,7 +141,7 @@ abstract class AbstractAppKernel extends Kernel implements AppKernel
      */
     public function getSystemMacAddress(): string
     {
-        return SYSTEM_MAC_ADDRESS;
+        return $_SERVER['SYSTEM_MAC_ADDRESS'] ?? '';
     }
 
     /**
@@ -155,7 +149,7 @@ abstract class AbstractAppKernel extends Kernel implements AppKernel
      */
     public function getCloudProvider(): string
     {
-        return CLOUD_PROVIDER;
+        return $_SERVER['CLOUD_PROVIDER'] ?? 'private';
     }
 
     /**
@@ -163,7 +157,7 @@ abstract class AbstractAppKernel extends Kernel implements AppKernel
      */
     public function getCloudRegion(): string
     {
-        return CLOUD_REGION;
+        return $_SERVER['CLOUD_REGION'] ?? 'unknown';
     }
 
     /**
@@ -171,7 +165,7 @@ abstract class AbstractAppKernel extends Kernel implements AppKernel
      */
     public function getCloudZone(): string
     {
-        return CLOUD_ZONE;
+        return $_SERVER['CLOUD_ZONE'] ?? 'unknown';
     }
 
     /**
@@ -179,7 +173,7 @@ abstract class AbstractAppKernel extends Kernel implements AppKernel
      */
     public function getCloudInstanceId(): string
     {
-        return CLOUD_INSTANCE_ID ?: str_replace([':', '-'], '', $this->getSystemMacAddress());
+        return $_SERVER['CLOUD_INSTANCE_ID'] ?? 'unknown';
     }
 
     /**
@@ -187,15 +181,7 @@ abstract class AbstractAppKernel extends Kernel implements AppKernel
      */
     public function getCloudInstanceType(): string
     {
-        return CLOUD_INSTANCE_TYPE;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getProjectDir()
-    {
-        return APP_ROOT_DIR;
+        return $_SERVER['CLOUD_INSTANCE_TYPE'] ?? 'unknown';
     }
 
     /**
@@ -238,29 +224,10 @@ abstract class AbstractAppKernel extends Kernel implements AppKernel
     protected function getKernelParameters()
     {
         $parameters = parent::getKernelParameters();
-        $parameters['app_env'] = $this->getAppEnv();
-        $parameters['app_vendor'] = $this->getAppVendor();
-        $parameters['app_name'] = $this->getAppName();
-        $parameters['app_version'] = $this->getAppVersion();
-        $parameters['app_build'] = $this->getAppBuild();
-        $parameters['app_deployment_id'] = $this->getAppDeploymentId();
-        $parameters['app_dev_branch'] = $this->getAppDevBranch();
-        $parameters['system_mac_address'] = $this->getSystemMacAddress();
-        $parameters['cloud_provider'] = $this->getCloudProvider();
-        $parameters['cloud_region'] = $this->getCloudRegion();
-        $parameters['cloud_zone'] = $this->getCloudZone();
-        $parameters['cloud_instance_id'] = $this->getCloudInstanceId();
-        $parameters['cloud_instance_type'] = $this->getCloudInstanceType();
-
         $parameters['kernel.config_dir'] = $this->getConfigDir();
         if (!isset($parameters['kernel.tmp_dir'])) {
             $parameters['kernel.tmp_dir'] = realpath($this->getTmpDir()) ?: $this->getTmpDir();
         }
-
-        // convenient flags for environments
-        $env = strtolower(trim($parameters['app_env']));
-        $parameters['is_production'] = 'prod' === $env || 'production' === $env;
-        $parameters['is_not_production'] = !$parameters['is_production'];
 
         return $parameters;
     }

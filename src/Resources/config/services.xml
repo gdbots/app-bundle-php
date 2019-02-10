@@ -4,6 +4,34 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
   <parameters>
+    <parameter key="env(APP_ENV)">dev</parameter>
+    <parameter key="env(APP_VENDOR)">unknown</parameter>
+    <parameter key="env(APP_NAME)">unknown</parameter>
+    <parameter key="env(APP_VERSION)">N.N.N</parameter>
+    <parameter key="env(APP_BUILD)">YYYYMMDDHHSS</parameter>
+    <parameter key="env(APP_DEPLOYMENT_ID)">YYYYMMDDHHSS</parameter>
+    <parameter key="env(APP_DEV_BRANCH)">master</parameter>
+    <parameter key="env(SYSTEM_MAC_ADDRESS)"/>
+    <parameter key="env(CLOUD_PROVIDER)">private</parameter>
+    <parameter key="env(CLOUD_REGION)">unknown</parameter>
+    <parameter key="env(CLOUD_ZONE)">unknown</parameter>
+    <parameter key="env(CLOUD_INSTANCE_ID)">unknown</parameter>
+    <parameter key="env(CLOUD_INSTANCE_TYPE)">unknown</parameter>
+
+    <parameter key="app_env">%env(APP_ENV)%</parameter>
+    <parameter key="app_vendor">%env(APP_VENDOR)%</parameter>
+    <parameter key="app_name">%env(APP_NAME)%</parameter>
+    <parameter key="app_version">%env(APP_VERSION)%</parameter>
+    <parameter key="app_build">%env(APP_BUILD)%</parameter>
+    <parameter key="app_deployment_id">%env(APP_DEPLOYMENT_ID)%</parameter>
+    <parameter key="app_dev_branch">%env(APP_DEV_BRANCH)%</parameter>
+    <parameter key="system_mac_address">%env(SYSTEM_MAC_ADDRESS)%</parameter>
+    <parameter key="cloud_provider">%env(CLOUD_PROVIDER)%</parameter>
+    <parameter key="cloud_region">%env(CLOUD_REGION)%</parameter>
+    <parameter key="cloud_zone">%env(CLOUD_ZONE)%</parameter>
+    <parameter key="cloud_instance_id">%env(CLOUD_INSTANCE_ID)%</parameter>
+    <parameter key="cloud_instance_type">%env(CLOUD_INSTANCE_TYPE)%</parameter>
+
     <parameter key="gdbots_app.default_device_view">desktop</parameter>
     <parameter key="gdbots_app.enabled_device_views" type="collection">
       <parameter>desktop</parameter>
