@@ -2,6 +2,10 @@
 This changelog references the relevant changes done in 0.x versions.
 
 
+## v0.5.1
+* Upgrade `twig/twig` from `^2.4` to `^2.7` and use twig `GlobalsInterface`.
+
+
 ## v0.5.0
 __BREAKING CHANGES__
 

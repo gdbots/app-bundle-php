@@ -3,14 +3,27 @@ declare(strict_types=1);
 
 namespace Gdbots\Bundle\AppBundle\Command;
 
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Kernel;
 
-final class DescribeCommand extends ContainerAwareCommand
+final class DescribeCommand extends Command
 {
+    /** @var ContainerInterface */
+    private $container;
+
+    /**
+     * @param ContainerInterface $container
+     */
+    public function __construct(ContainerInterface $container)
+    {
+        parent::__construct();
+        $this->container = $container;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -35,7 +48,6 @@ final class DescribeCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $container = $this->getContainer();
         $keys = [
             'app_env',
             'app_vendor',
@@ -64,7 +76,7 @@ final class DescribeCommand extends ContainerAwareCommand
         $data['symfony_version'] = Kernel::VERSION;
 
         foreach ($keys as $k) {
-            $data[str_replace('.', '_', $k)] = $container->getParameter($k);
+            $data[str_replace('.', '_', $k)] = $this->container->getParameter($k);
         }
 
         $output->writeln(json_encode($data, $input->getOption('pretty') ? JSON_PRETTY_PRINT : 0));

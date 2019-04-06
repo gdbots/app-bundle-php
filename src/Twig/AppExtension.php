@@ -4,8 +4,10 @@ declare(strict_types=1);
 namespace Gdbots\Bundle\AppBundle\Twig;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Twig\Extension\AbstractExtension;
+use Twig\Extension\GlobalsInterface;
 
-final class AppExtension extends \Twig_Extension implements \Twig_Extension_GlobalsInterface
+final class AppExtension extends AbstractExtension implements GlobalsInterface
 {
     /**
      * Constants from the container to return as globals for twig templating.
