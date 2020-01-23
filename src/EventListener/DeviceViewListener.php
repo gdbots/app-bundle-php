@@ -60,7 +60,17 @@ final class DeviceViewListener implements EventSubscriberInterface
         }
 
         if ($request->query->has('device_view')) {
-            $response->headers->setCookie(new Cookie('device_view', $this->deviceView));
+            $response->headers->setCookie(new Cookie(
+                'device_view',
+                $this->deviceView,
+                0,
+                '/',
+                null,
+                true,
+                true,
+                false,
+                Cookie::SAMESITE_STRICT
+            ));
         }
     }
 
