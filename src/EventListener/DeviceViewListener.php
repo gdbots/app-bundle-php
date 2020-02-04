@@ -66,7 +66,7 @@ final class DeviceViewListener implements EventSubscriberInterface
                 0,
                 '/',
                 null,
-                isset($_SERVER['HTTPS']) && !empty($_SERVER['HTTPS']) ? true : false,
+                $request->isSecure(),
                 true,
                 false,
                 Cookie::SAMESITE_STRICT
