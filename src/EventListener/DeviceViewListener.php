@@ -66,7 +66,7 @@ final class DeviceViewListener implements EventSubscriberInterface
                 0,
                 '/',
                 null,
-                true,
+                $request->isSecure(),
                 true,
                 false,
                 Cookie::SAMESITE_STRICT
