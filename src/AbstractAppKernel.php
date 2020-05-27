@@ -14,13 +14,8 @@ abstract class AbstractAppKernel extends Kernel implements AppKernel
     use MicroKernelTrait;
 
     protected const CONFIG_EXTS = '.{php,xml,yaml,yml}';
+    protected ?string $appBuild = null;
 
-    /** @var string */
-    protected $appBuild;
-
-    /**
-     * {@inheritdoc}
-     */
     public function registerBundles()
     {
         $contents = require $this->getConfigDir() . '/bundles.php';
