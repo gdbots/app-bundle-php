@@ -12,25 +12,18 @@ use Symfony\Component\HttpKernel\Kernel;
 
 final class DescribeCommand extends Command
 {
-    /** @var ContainerInterface */
-    private $container;
+    protected static $defaultName = 'app:describe';
+    private ContainerInterface $container;
 
-    /**
-     * @param ContainerInterface $container
-     */
     public function __construct(ContainerInterface $container)
     {
         parent::__construct();
         $this->container = $container;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function configure()
     {
         $this
-            ->setName('app:describe')
             ->setDescription('Returns the details of the application as json (name, version, build, etc.)')
             ->addOption(
                 'pretty',
@@ -40,13 +33,7 @@ final class DescribeCommand extends Command
             );
     }
 
-    /**
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     *
-     * @return null
-     */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $keys = [
             'app_env',
@@ -80,5 +67,6 @@ final class DescribeCommand extends Command
         }
 
         $output->writeln(json_encode($data, $input->getOption('pretty') ? JSON_PRETTY_PRINT : 0));
+        return 0;
     }
 }

@@ -3,9 +3,11 @@ declare(strict_types=1);
 
 namespace Gdbots\Bundle\AppBundle\Twig;
 
+use Gdbots\Bundle\AppBundle\GDPR;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\Extension\GlobalsInterface;
+use Twig\TwigFunction;
 
 final class AppExtension extends AbstractExtension implements GlobalsInterface
 {
@@ -30,12 +32,8 @@ final class AppExtension extends AbstractExtension implements GlobalsInterface
         'cloud_instance_type',
     ];
 
-    /** @var ContainerInterface */
-    private $container;
+    private ContainerInterface $container;
 
-    /**
-     * @param ContainerInterface $container
-     */
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
@@ -48,7 +46,7 @@ final class AppExtension extends AbstractExtension implements GlobalsInterface
         ];
     }
 
-    public function getGlobals()
+    public function getGlobals(): array
     {
         $resolver = $this->container->get('gdbots_app.device_view_resolver');
         $globals = [
@@ -61,13 +59,5 @@ final class AppExtension extends AbstractExtension implements GlobalsInterface
         }
 
         return $globals;
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return 'gdbots_app_extension';
     }
 }

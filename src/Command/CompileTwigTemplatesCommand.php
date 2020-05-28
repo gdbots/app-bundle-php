@@ -12,16 +12,17 @@ use Twig\Loader\FilesystemLoader;
 
 final class CompileTwigTemplatesCommand extends Command
 {
-    /** @var Environment */
-    private $twig;
+    protected static $defaultName = 'app:compile-twig-templates';
+
+    private Environment $twig;
 
     public function __construct(Environment $twig)
     {
-        parent::__construct('app:compile-twig-templates');
+        parent::__construct();
         $this->twig = $twig;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $count = 0;
         foreach ($this->getIterator() as $template) {
@@ -36,6 +37,7 @@ final class CompileTwigTemplatesCommand extends Command
         }
 
         $output->writeln(sprintf('Compiled %d twig templates.', number_format($count)));
+        return 0;
     }
 
     private function getIterator(): \ArrayIterator

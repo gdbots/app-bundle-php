@@ -55,6 +55,10 @@
       <tag name="kernel.event_subscriber"/>
     </service>
 
+    <service id="gdbots_app.response_tokens_listener" class="Gdbots\Bundle\AppBundle\EventListener\ResponseTokensListener" public="false">
+      <tag name="kernel.event_subscriber"/>
+    </service>
+
     <service id="gdbots_app.device_view_resolver" class="Gdbots\Bundle\AppBundle\DeviceViewResolver" public="true">
       <argument>%gdbots_app.default_device_view%</argument>
       <argument>%gdbots_app.enabled_device_views%</argument>

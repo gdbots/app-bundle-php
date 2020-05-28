@@ -5,16 +5,13 @@ namespace Gdbots\Bundle\AppBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Twig\Error\LoaderError;
 
 /**
  * Using this trait requires extending:
  * @see \Symfony\Bundle\FrameworkBundle\Controller\Controller
  *
  * or a compatible alternative (with get and render methods).
- *
- * In order to support both Symfony 3 and 4 we've left the
- * abstract methods off as their function signatures are
- * different (v4 has scalar type hints).
  */
 trait DeviceViewRendererTrait
 {
@@ -26,9 +23,9 @@ trait DeviceViewRendererTrait
      * @param array    $parameters An array of parameters to pass to the view
      * @param Response $response   A response instance
      *
-     * @return Response A Response instance
+     * @return Response
      *
-     * @throws \Exception
+     * @throws \Throwable
      */
     protected function renderUsingDeviceView(string $view, array $parameters = [], ?Response $response = null): Response
     {
@@ -42,8 +39,8 @@ trait DeviceViewRendererTrait
 
         try {
             return $this->render(str_replace('%device_view%', '.' . $deviceView, $view), $parameters, $response);
-        } catch (\Exception $e) {
-            if (!$e->getPrevious() instanceof \Twig_Error_Loader) {
+        } catch (\Throwable $e) {
+            if (!$e->getPrevious() instanceof LoaderError) {
                 throw $e;
             }
 
@@ -52,18 +49,12 @@ trait DeviceViewRendererTrait
     }
 
     /**
-     * @param string $id
-     *
-     * @return object
+     * @see Symfony\Bundle\FrameworkBundle\Controller\AbstractController::get
      */
-    // abstract protected function get(string $id);
+    abstract protected function get(string $id): object;
 
     /**
-     * @param string   $view
-     * @param array    $parameters
-     * @param Response $response
-     *
-     * @return Response
+     * @see Symfony\Bundle\FrameworkBundle\Controller\AbstractController::render
      */
-    // abstract protected function render(string $view, array $parameters = [], Response $response = null): Response;
+    abstract protected function render(string $view, array $parameters = [], Response $response = null): Response;
 }
