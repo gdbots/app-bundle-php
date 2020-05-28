@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Gdbots\Bundle\AppBundle\EventListener;
+namespace Gdbots\Bundle\AppBundle\EventSubscriber;
 
 use Gdbots\Bundle\AppBundle\DeviceViewResolver;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -11,7 +11,7 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
-final class DeviceViewListener implements EventSubscriberInterface
+final class DeviceViewSubscriber implements EventSubscriberInterface
 {
     private DeviceViewResolver $resolver;
     private ?string $deviceView = null;

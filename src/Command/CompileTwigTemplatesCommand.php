@@ -13,7 +13,6 @@ use Twig\Loader\FilesystemLoader;
 final class CompileTwigTemplatesCommand extends Command
 {
     protected static $defaultName = 'app:compile-twig-templates';
-
     private Environment $twig;
 
     public function __construct(Environment $twig)
@@ -28,7 +27,7 @@ final class CompileTwigTemplatesCommand extends Command
         foreach ($this->getIterator() as $template) {
             ++$count;
             try {
-                $this->twig->loadTemplate($template);
+                $this->twig->load($template);
             } catch (\Throwable $e) {
                 // problem during compilation, give up
                 // might be a syntax error or a non-Twig template

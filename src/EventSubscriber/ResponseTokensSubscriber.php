@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Gdbots\Bundle\AppBundle\EventListener;
+namespace Gdbots\Bundle\AppBundle\EventSubscriber;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
@@ -15,12 +15,12 @@ use Symfony\Component\HttpKernel\KernelEvents;
  *
  * todo: figure out how to replace tokens on commands?
  */
-final class ResponseTokensListener implements EventSubscriberInterface
+final class ResponseTokensSubscriber implements EventSubscriberInterface
 {
     public static function getSubscribedEvents()
     {
         return [
-            KernelEvents::RESPONSE => ['onKernelResponse', -1000],
+            KernelEvents::RESPONSE => ['onKernelResponse', -10000],
         ];
     }
 
