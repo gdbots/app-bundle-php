@@ -1,39 +1,36 @@
 <?php
 declare(strict_types=1);
 
-namespace Gdbots\Bundle\AppBundle\EventListener;
+namespace Gdbots\Bundle\AppBundle\EventSubscriber;
 
 use Gdbots\Bundle\AppBundle\DeviceViewResolver;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
+use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
-final class DeviceViewListener implements EventSubscriberInterface
+final class DeviceViewSubscriber implements EventSubscriberInterface
 {
-    /** @var DeviceViewResolver */
-    private $resolver;
+    private DeviceViewResolver $resolver;
+    private ?string $deviceView = null;
+    private bool $hasInvalidCookie = false;
 
-    /** @var string */
-    private $deviceView;
-
-    /** @var bool */
-    private $hasInvalidCookie = false;
-
-    /**
-     * @param DeviceViewResolver $resolver
-     */
     public function __construct(DeviceViewResolver $resolver)
     {
         $this->resolver = $resolver;
     }
 
-    /**
-     * @param GetResponseEvent $event
-     */
-    public function onKernelRequest(GetResponseEvent $event): void
+    public static function getSubscribedEvents()
+    {
+        return [
+            KernelEvents::REQUEST  => ['onKernelRequest', 10000],
+            KernelEvents::RESPONSE => ['onKernelResponse', 10000],
+        ];
+    }
+
+    public function onKernelRequest(RequestEvent $event): void
     {
         $request = $event->getRequest();
         $request->attributes->set('device_view', $this->getDeviceView($request));
@@ -43,10 +40,7 @@ final class DeviceViewListener implements EventSubscriberInterface
         }
     }
 
-    /**
-     * @param FilterResponseEvent $event
-     */
-    public function onKernelResponse(FilterResponseEvent $event): void
+    public function onKernelResponse(ResponseEvent $event): void
     {
         if (!$event->isMasterRequest()) {
             return;
@@ -74,11 +68,6 @@ final class DeviceViewListener implements EventSubscriberInterface
         }
     }
 
-    /**
-     * @param Request $request
-     *
-     * @return string
-     */
     private function getDeviceView(Request $request): string
     {
         if (null === $this->deviceView) {
@@ -92,16 +81,5 @@ final class DeviceViewListener implements EventSubscriberInterface
         }
 
         return $this->deviceView;
-    }
-
-    /**
-     * @return array
-     */
-    public static function getSubscribedEvents()
-    {
-        return [
-            KernelEvents::REQUEST  => ['onKernelRequest', 10000],
-            KernelEvents::RESPONSE => ['onKernelResponse', 10000],
-        ];
     }
 }

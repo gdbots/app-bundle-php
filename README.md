@@ -2,8 +2,6 @@ app-bundle-php
 =============
 
 [![Build Status](https://api.travis-ci.org/gdbots/app-bundle-php.svg)](https://travis-ci.org/gdbots/app-bundle-php)
-[![Code Climate](https://codeclimate.com/github/gdbots/app-bundle-php/badges/gpa.svg)](https://codeclimate.com/github/gdbots/app-bundle-php)
-[![Test Coverage](https://codeclimate.com/github/gdbots/app-bundle-php/badges/coverage.svg)](https://codeclimate.com/github/gdbots/app-bundle-php/coverage)
 
 App bundle for symfony apps which provides a base app kernel, device view and viewer country awareness.
 
@@ -18,7 +16,7 @@ When an app is deployed we need to execute a symfony command and/or curl the app
 Example output from the command:
 ```json
 {
-  "symfony_version": "4.0.0",
+  "symfony_version": "5.0.0",
   "app_vendor": "acme",
   "app_name": "blog",
   "app_version": "v0.1.0",

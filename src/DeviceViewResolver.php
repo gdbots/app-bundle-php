@@ -25,13 +25,9 @@ namespace Gdbots\Bundle\AppBundle;
  */
 final class DeviceViewResolver
 {
-    private $enabledViews = [];
-    private $default;
+    private array $enabledViews = [];
+    private string $default;
 
-    /**
-     * @param string $default
-     * @param array  $enabledViews
-     */
     public function __construct(string $default = 'desktop', array $enabledViews = [])
     {
         foreach ($enabledViews as $view) {
@@ -45,11 +41,6 @@ final class DeviceViewResolver
         $this->default = $this->isValid($default) ? $default : key($this->enabledViews);
     }
 
-    /**
-     * @param string $view
-     *
-     * @return string
-     */
     public function resolve(?string $view = null): string
     {
         $view = $this->sanitize("{$view}");
@@ -60,21 +51,11 @@ final class DeviceViewResolver
         return $this->default;
     }
 
-    /**
-     * @param string $view
-     *
-     * @return string
-     */
     private function sanitize(string $view): string
     {
         return strtolower(preg_replace('/[^a-zA-Z0-9]+/', '', $view));
     }
 
-    /**
-     * @param string $view
-     *
-     * @return bool
-     */
     private function isValid(string $view): bool
     {
         return !empty($view) && isset($this->enabledViews[$view]);

@@ -50,8 +50,12 @@
       <tag name="console.command"/>
     </prototype>
 
-    <service id="gdbots_app.device_view_listener" class="Gdbots\Bundle\AppBundle\EventListener\DeviceViewListener" public="false">
+    <service id="gdbots_app.device_view_subscriber" class="Gdbots\Bundle\AppBundle\EventSubscriber\DeviceViewSubscriber" public="false">
       <argument type="service" id="gdbots_app.device_view_resolver"/>
+      <tag name="kernel.event_subscriber"/>
+    </service>
+
+    <service id="gdbots_app.response_tokens_subscriber" class="Gdbots\Bundle\AppBundle\EventSubscriber\ResponseTokensSubscriber" public="false">
       <tag name="kernel.event_subscriber"/>
     </service>
 
