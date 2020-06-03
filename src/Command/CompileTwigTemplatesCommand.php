@@ -36,7 +36,7 @@ final class CompileTwigTemplatesCommand extends Command
         }
 
         $output->writeln(sprintf('Compiled %d twig templates.', number_format($count)));
-        return 0;
+        return self::SUCCESS;
     }
 
     private function getIterator(): \ArrayIterator

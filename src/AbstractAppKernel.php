@@ -4,10 +4,9 @@ declare(strict_types=1);
 namespace Gdbots\Bundle\AppBundle;
 
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
-use Symfony\Component\Config\Loader\LoaderInterface;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\HttpKernel\Kernel;
-use Symfony\Component\Routing\RouteCollectionBuilder;
+use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
 
 abstract class AbstractAppKernel extends Kernel implements AppKernel
 {
@@ -16,45 +15,36 @@ abstract class AbstractAppKernel extends Kernel implements AppKernel
     protected const CONFIG_EXTS = '.{php,xml,yaml,yml}';
     protected ?string $appBuild = null;
 
-    public function registerBundles()
+    protected function configureContainer(ContainerConfigurator $container)
     {
-        $contents = require $this->getConfigDir() . '/bundles.php';
-        foreach ($contents as $class => $envs) {
-            if (isset($envs['all']) || isset($envs[$this->environment])) {
-                yield new $class();
-            }
-        }
-    }
-
-    protected function configureContainer(ContainerBuilder $container, LoaderInterface $loader)
-    {
-        $container->setParameter('container.dumper.inline_class_loader', true);
-        $container->setParameter('container.dumper.inline_factories', true);
+        $parameters = $container->parameters();
+        $parameters->set('container.dumper.inline_class_loader', true);
+        $parameters->set('container.dumper.inline_factories', true);
         $confDir = $this->getConfigDir();
 
-        $loader->load($confDir . '/packages/*' . static::CONFIG_EXTS, 'glob');
+        $container->import($confDir . '/packages/*' . static::CONFIG_EXTS);
 
         if (is_dir($confDir . '/packages/' . $this->environment)) {
-            $loader->load($confDir . '/packages/' . $this->environment . '/**/*' . static::CONFIG_EXTS, 'glob');
+            $container->import($confDir . '/packages/' . $this->environment . '/**/*' . static::CONFIG_EXTS);
         }
 
-        $loader->load($confDir . '/services' . static::CONFIG_EXTS, 'glob');
-        $loader->load($confDir . '/services_' . $this->environment . static::CONFIG_EXTS, 'glob');
+        $container->import($confDir . '/services' . static::CONFIG_EXTS);
+        $container->import($confDir . '/services_' . $this->environment . static::CONFIG_EXTS);
     }
 
-    protected function configureRoutes(RouteCollectionBuilder $routes)
+    protected function configureRoutes(RoutingConfigurator $routes)
     {
         $confDir = $this->getConfigDir();
 
         if (is_dir($confDir . '/routes/')) {
-            $routes->import($confDir . '/routes/*' . static::CONFIG_EXTS, '/', 'glob');
+            $routes->import($confDir . '/routes/*' . static::CONFIG_EXTS);
         }
 
         if (is_dir($confDir . '/routes/' . $this->environment)) {
-            $routes->import($confDir . '/routes/' . $this->environment . '/**/*' . static::CONFIG_EXTS, '/', 'glob');
+            $routes->import($confDir . '/routes/' . $this->environment . '/**/*' . static::CONFIG_EXTS);
         }
 
-        $routes->import($confDir . '/routes' . static::CONFIG_EXTS, '/', 'glob');
+        $routes->import($confDir . '/routes' . static::CONFIG_EXTS);
     }
 
     public function getAppEnv(): string

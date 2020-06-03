@@ -46,7 +46,7 @@
   </parameters>
 
   <services>
-    <prototype namespace="Gdbots\Bundle\AppBundle\Command\" resource="../../Command/*" autoconfigure="true" autowire="true">
+    <prototype namespace="Gdbots\Bundle\AppBundle\Command\" resource="../src/Command/*" autoconfigure="true" autowire="true">
       <tag name="console.command"/>
     </prototype>
 

@@ -17,17 +17,17 @@ final class DeviceViewSubscriber implements EventSubscriberInterface
     private ?string $deviceView = null;
     private bool $hasInvalidCookie = false;
 
-    public function __construct(DeviceViewResolver $resolver)
-    {
-        $this->resolver = $resolver;
-    }
-
     public static function getSubscribedEvents()
     {
         return [
             KernelEvents::REQUEST  => ['onKernelRequest', 10000],
             KernelEvents::RESPONSE => ['onKernelResponse', 10000],
         ];
+    }
+
+    public function __construct(DeviceViewResolver $resolver)
+    {
+        $this->resolver = $resolver;
     }
 
     public function onKernelRequest(RequestEvent $event): void

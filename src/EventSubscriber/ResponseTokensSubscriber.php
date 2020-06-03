@@ -12,8 +12,6 @@ use Symfony\Component\HttpKernel\KernelEvents;
  * performance monitoring, etc.
  *
  * This should be the last item run in most cases.
- *
- * todo: figure out how to replace tokens on commands?
  */
 final class ResponseTokensSubscriber implements EventSubscriberInterface
 {

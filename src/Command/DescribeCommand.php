@@ -67,6 +67,6 @@ final class DescribeCommand extends Command
         }
 
         $output->writeln(json_encode($data, $input->getOption('pretty') ? JSON_PRETTY_PRINT : 0));
-        return 0;
+        return self::SUCCESS;
     }
 }
