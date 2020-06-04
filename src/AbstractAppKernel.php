@@ -3,7 +3,9 @@ declare(strict_types=1);
 
 namespace Gdbots\Bundle\AppBundle;
 
+use Psr\Container\ContainerInterface as PsrContainerInterface;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
@@ -30,6 +32,9 @@ abstract class AbstractAppKernel extends Kernel implements AppKernel
 
         $container->import($confDir . '/services' . static::CONFIG_EXTS);
         $container->import($confDir . '/services_' . $this->environment . static::CONFIG_EXTS);
+
+        $container->services()->alias(ContainerInterface::class, 'service_container');
+        $container->services()->alias(PsrContainerInterface::class, 'service_container');
     }
 
     protected function configureRoutes(RoutingConfigurator $routes)
