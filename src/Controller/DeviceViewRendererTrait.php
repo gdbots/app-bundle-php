@@ -9,7 +9,7 @@ use Twig\Error\LoaderError;
 
 /**
  * Using this trait requires extending:
- * @see \Symfony\Bundle\FrameworkBundle\Controller\Controller
+ * @see \Symfony\Bundle\FrameworkBundle\Controller\AbstractController
  *
  * or a compatible alternative (with get and render methods).
  */
@@ -49,12 +49,12 @@ trait DeviceViewRendererTrait
     }
 
     /**
-     * @see Symfony\Bundle\FrameworkBundle\Controller\AbstractController::get
+     * @see \Symfony\Bundle\FrameworkBundle\Controller\AbstractController::get
      */
     abstract protected function get(string $id): object;
 
     /**
-     * @see Symfony\Bundle\FrameworkBundle\Controller\AbstractController::render
+     * @see \Symfony\Bundle\FrameworkBundle\Controller\AbstractController::render
      */
     abstract protected function render(string $view, array $parameters = [], Response $response = null): Response;
 }
