@@ -40,11 +40,11 @@ trait DeviceViewRendererTrait
         try {
             return $this->render(str_replace('%device_view%', '.' . $deviceView, $view), $parameters, $response);
         } catch (\Throwable $e) {
-            if (!$e->getPrevious() instanceof LoaderError) {
-                throw $e;
+            if ($e instanceof LoaderError || $e->getPrevious() instanceof LoaderError) {
+                return $this->render(str_replace('%device_view%', '', $view), $parameters, $response);
             }
 
-            return $this->render(str_replace('%device_view%', '', $view), $parameters, $response);
+            throw $e;
         }
     }
 

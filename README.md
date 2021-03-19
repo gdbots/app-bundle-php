@@ -1,8 +1,6 @@
 app-bundle-php
 =============
 
-[![Build Status](https://api.travis-ci.org/gdbots/app-bundle-php.svg)](https://travis-ci.org/gdbots/app-bundle-php)
-
 App bundle for symfony apps which provides a base app kernel, device view and viewer country awareness.
 
 

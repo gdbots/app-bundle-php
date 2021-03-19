@@ -2,6 +2,10 @@
 This changelog references the relevant changes done in 2.x versions.
 
 
+## v2.1.1
+* Check for LoaderError exception direct or in previous for `DeviceViewRendererTrait::renderUsingDeviceView` fallback.
+
+
 ## v2.1.0
 * Require `"symfony/console": "^5.1"`
 * Require `"symfony/framework-bundle": "^5.1"`
