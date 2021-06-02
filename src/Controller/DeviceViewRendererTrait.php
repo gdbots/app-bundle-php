@@ -33,7 +33,7 @@ trait DeviceViewRendererTrait
         $request = $this->get('request_stack')->getCurrentRequest();
         $deviceView = $request ? $request->attributes->get('device_view') : null;
 
-        if (null === $deviceView || false === strpos($view, '%device_view%')) {
+        if (null === $deviceView || !str_contains($view, '%device_view%')) {
             return $this->render(str_replace('%device_view%', '', $view), $parameters, $response);
         }
 

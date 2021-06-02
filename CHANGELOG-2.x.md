@@ -2,6 +2,11 @@
 This changelog references the relevant changes done in 2.x versions.
 
 
+## v2.2.0
+* Require php 8 and symfony 5.3 minimum.
+* Use new `isMainRequest` in symfony.
+
+
 ## v2.1.1
 * Check for LoaderError exception direct or in previous for `DeviceViewRendererTrait::renderUsingDeviceView` fallback.
 
