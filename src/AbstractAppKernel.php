@@ -130,27 +130,27 @@ abstract class AbstractAppKernel extends Kernel implements AppKernel
         return $_SERVER['CLOUD_INSTANCE_TYPE'] ?? 'unknown';
     }
 
-    public function getConfigDir()
+    public function getConfigDir(): string
     {
         return $_SERVER['APP_CONFIG_DIR'] ?? $this->getProjectDir() . '/config';
     }
 
-    public function getCacheDir()
+    public function getCacheDir(): string
     {
         return $_SERVER['APP_CACHE_DIR'] ?? $this->getProjectDir() . '/var/cache/' . $this->environment;
     }
 
-    public function getLogDir()
+    public function getLogDir(): string
     {
         return $_SERVER['APP_LOGS_DIR'] ?? $this->getProjectDir() . '/var/logs';
     }
 
-    public function getTmpDir()
+    public function getTmpDir(): string
     {
         return $_SERVER['APP_TMP_DIR'] ?? $this->getProjectDir() . '/var/tmp';
     }
 
-    protected function getKernelParameters()
+    protected function getKernelParameters(): array
     {
         $parameters = parent::getKernelParameters();
         $parameters['kernel.config_dir'] = $this->getConfigDir();

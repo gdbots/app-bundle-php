@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Gdbots\Bundle\AppBundle\Controller;
 
+use Psr\Container\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Error\LoaderError;
@@ -11,10 +12,13 @@ use Twig\Error\LoaderError;
  * Using this trait requires extending:
  * @see \Symfony\Bundle\FrameworkBundle\Controller\AbstractController
  *
- * or a compatible alternative (with get and render methods).
+ * or a compatible alternative (with container and render methods).
  */
 trait DeviceViewRendererTrait
 {
+    /** @var ContainerInterface */
+    protected $container;
+
     /**
      * Renders a view that is device view specific first, if found, otherwise the default/shared view.
      * This calls the FrameworkBundle Controller "render" method under the hood.
@@ -48,10 +52,10 @@ trait DeviceViewRendererTrait
         }
     }
 
-    /**
-     * @see \Symfony\Bundle\FrameworkBundle\Controller\AbstractController::get
-     */
-    abstract protected function get(string $id): object;
+    protected function get(string $id): object
+    {
+        return $this->container->get($id);
+    }
 
     /**
      * @see \Symfony\Bundle\FrameworkBundle\Controller\AbstractController::render

@@ -39,7 +39,7 @@ final class AppExtension extends AbstractExtension implements GlobalsInterface
         $this->container = $container;
     }
 
-    public function getFunctions()
+    public function getFunctions(): array
     {
         return [
             new TwigFunction('gdpr_applies', [GDPR::class, 'applies']),
