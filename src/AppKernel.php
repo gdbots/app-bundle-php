@@ -121,25 +121,16 @@ interface AppKernel extends KernelInterface
     public function getCloudInstanceType(): string;
 
     /**
-     * Gets the project directory (root of app).
-     *
-     * @link https://symfony.com/blog/new-in-symfony-3-3-a-simpler-way-to-get-the-project-root-directory
-     *
-     * @return string
-     */
-    public function getProjectDir();
-
-    /**
      * Gets the project's config directory.
      *
      * @return string
      */
-    public function getConfigDir();
+    public function getConfigDir(): string;
 
     /**
      * Gets the project's tmp directory.
      *
      * @return string
      */
-    public function getTmpDir();
+    public function getTmpDir(): string;
 }
