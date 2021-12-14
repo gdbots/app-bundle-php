@@ -2,6 +2,10 @@
 This changelog references the relevant changes done in 2.x versions.
 
 
+## v2.3.1
+* Add more typehints for symfony to squash deprecation notices.
+
+
 ## v2.3.0
 * Require php 8.1 and allow symfony 5.x|6.x.
 

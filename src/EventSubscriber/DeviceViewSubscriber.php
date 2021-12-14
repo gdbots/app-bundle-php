@@ -17,7 +17,7 @@ final class DeviceViewSubscriber implements EventSubscriberInterface
     private ?string $deviceView = null;
     private bool $hasInvalidCookie = false;
 
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             KernelEvents::REQUEST  => ['onKernelRequest', 10000],
