@@ -2,6 +2,11 @@
 This changelog references the relevant changes done in 2.x versions.
 
 
+## v2.4.0
+* Require symfony 6.2.x
+* Use new symfony/php attributes instead of annotations.
+
+
 ## v2.3.1
 * Add more typehints for symfony to squash deprecation notices.
 

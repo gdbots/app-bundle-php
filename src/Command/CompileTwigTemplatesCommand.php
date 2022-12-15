@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Gdbots\Bundle\AppBundle\Command;
 
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -10,15 +11,12 @@ use Symfony\Component\Finder\Finder;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 
+#[AsCommand(name: 'app:compile-twig-templates')]
 final class CompileTwigTemplatesCommand extends Command
 {
-    protected static $defaultName = 'app:compile-twig-templates';
-    private Environment $twig;
-
-    public function __construct(Environment $twig)
+    public function __construct(private Environment $twig)
     {
         parent::__construct();
-        $this->twig = $twig;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
