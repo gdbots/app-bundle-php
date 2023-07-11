@@ -19,7 +19,7 @@ final class DescribeCommand extends Command
         parent::__construct();
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setDescription('Returns the details of the application as json (name, version, build, etc.)')

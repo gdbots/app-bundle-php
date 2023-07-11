@@ -17,7 +17,7 @@ abstract class AbstractAppKernel extends Kernel implements AppKernel
     protected const CONFIG_EXTS = '.{php,xml,yaml,yml}';
     protected ?string $appBuild = null;
 
-    protected function configureContainer(ContainerConfigurator $container)
+    protected function configureContainer(ContainerConfigurator $container): void
     {
         $parameters = $container->parameters();
         $parameters->set('container.dumper.inline_class_loader', true);
@@ -37,7 +37,7 @@ abstract class AbstractAppKernel extends Kernel implements AppKernel
         $container->services()->alias(PsrContainerInterface::class, 'service_container');
     }
 
-    protected function configureRoutes(RoutingConfigurator $routes)
+    protected function configureRoutes(RoutingConfigurator $routes): void
     {
         $confDir = $this->getConfigDir();
 
