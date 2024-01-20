@@ -20,8 +20,8 @@ abstract class AbstractAppKernel extends Kernel implements AppKernel
     protected function configureContainer(ContainerConfigurator $container): void
     {
         $parameters = $container->parameters();
-        $parameters->set('container.dumper.inline_class_loader', true);
-        $parameters->set('container.dumper.inline_factories', true);
+        $parameters->set('.container.dumper.inline_class_loader', true);
+        $parameters->set('.container.dumper.inline_factories', true);
         $confDir = $this->getConfigDir();
 
         $container->import($confDir . '/packages/*' . static::CONFIG_EXTS);

@@ -2,6 +2,10 @@
 This changelog references the relevant changes done in 2.x versions.
 
 
+## v2.5.0
+* Updates for symfony 6.4.x deprecations.
+
+
 ## v2.4.1
 * Updates for symfony 6.3.x deprecations.
 
