@@ -2,6 +2,10 @@
 This changelog references the relevant changes done in 2.x versions.
 
 
+## v2.5.2
+* Fix DeviceViewRendererTrait to match new symfony container typehint.
+
+
 ## v2.5.1
 * Allow symfony 7.x.
 

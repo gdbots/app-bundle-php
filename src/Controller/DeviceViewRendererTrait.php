@@ -16,8 +16,7 @@ use Twig\Error\LoaderError;
  */
 trait DeviceViewRendererTrait
 {
-    /** @var ContainerInterface */
-    protected $container;
+    protected ContainerInterface $container;
 
     /**
      * Renders a view that is device view specific first, if found, otherwise the default/shared view.
