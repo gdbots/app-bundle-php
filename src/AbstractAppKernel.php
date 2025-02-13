@@ -14,7 +14,7 @@ abstract class AbstractAppKernel extends Kernel implements AppKernel
 {
     use MicroKernelTrait;
 
-    protected const CONFIG_EXTS = '.{php,xml,yaml,yml}';
+    protected const string CONFIG_EXTS = '.{php,xml,yaml,yml}';
     protected ?string $appBuild = null;
 
     protected function configureContainer(ContainerConfigurator $container): void

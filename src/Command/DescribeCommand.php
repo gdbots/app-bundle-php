@@ -14,7 +14,7 @@ use Symfony\Component\HttpKernel\Kernel;
 #[AsCommand(name: 'app:describe')]
 final class DescribeCommand extends Command
 {
-    public function __construct(private ContainerInterface $container)
+    public function __construct(private readonly ContainerInterface $container)
     {
         parent::__construct();
     }

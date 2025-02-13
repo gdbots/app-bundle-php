@@ -7,7 +7,7 @@ final class GDPR
 {
     // https://gist.github.com/henrik/1688572
     // https://stackoverflow.com/questions/50465813/european-union-specific-iso-1366-1-country-codes-for-geoip
-    private const COUNTRIES = [
+    private const array COUNTRIES = [
         'AT' => true,
         'BE' => true,
         'BG' => true,

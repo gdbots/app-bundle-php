@@ -16,7 +16,7 @@ final class AppExtension extends AbstractExtension implements GlobalsInterface
      *
      * @const string[]
      */
-    private const APP_GLOBALS = [
+    private const array APP_GLOBALS = [
         'app_env',
         'app_vendor',
         'app_name',
