@@ -2,6 +2,10 @@
 This changelog references the relevant changes done in 3.x versions.
 
 
+## v3.0.1
+* Handle Symfony deprecations.
+
+
 ## v3.0.0
 __BREAKING CHANGES__
 
